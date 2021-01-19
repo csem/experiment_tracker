@@ -29,13 +29,16 @@ def create_exp_df(json_dict, metrics_key="Metrics"):
         df.loc[i].fillna(axis=0, method="backfill", inplace=True)
         df.loc[i].fillna(axis=0, method="ffill", inplace=True)
 
+    new_columns = pd.MultiIndex.from_tuples([("metrics", x) for x in df.columns])
+    df.columns = new_columns
     # Add Hyperparameters
     if "hyper" in json_dict:
         try:
             for key, val in json_dict.get("hyper").items():
-                df[key] = val
+                df[("hyper", key)] = val
         except:
             print("Issue reading these Hyps {}".join(json_dict.get("hyper")))
+    df = df.drop_duplicates()
     return df
 
 
@@ -64,6 +67,7 @@ def load_results(folder):
                     tuples.append((name[:-5], exp_time))
         index = pd.MultiIndex.from_tuples(tuples, names=("Name", "Exp_time"))
         df = pd.concat(dfs, axis=0, keys=index)
+        df = df.drop_duplicates()
         return df
     elif folder == "multirun":
         runs = []
@@ -102,6 +106,7 @@ def load_results(folder):
                             tuples.append((name[:-5], exp_time, i))
         index = pd.MultiIndex.from_tuples(tuples, names=("Name", "Exp_time", "Run"))
         df = pd.concat(dfs, axis=0, keys=index)
+        df = df.drop_duplicates()
         return df
 
 
