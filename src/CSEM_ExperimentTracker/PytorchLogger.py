@@ -14,6 +14,7 @@ class MyLogger(LightningLoggerBase):
         self.json_dict["type"] = "Lightning"
         self.json_dict["exp_name"] = exp_name
         self.json_dict["Metrics"] = self.metrics
+        self.json_dict["Hyperparams"] = {}
 
     @property
     def name(self):
@@ -26,6 +27,7 @@ class MyLogger(LightningLoggerBase):
     @property
     @rank_zero_experiment
     def experiment(self):
+        breakpoint()
         # Return the experiment object associated with this logger.
         pass
 

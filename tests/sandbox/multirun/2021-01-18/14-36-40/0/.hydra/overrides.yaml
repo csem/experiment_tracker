@@ -1,0 +1,2 @@
+- hyperparameters.std_noise=True
+- hyperparameters.normalization=False

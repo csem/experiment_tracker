@@ -1,0 +1,55 @@
+[2021-01-11 16:05:03,292][lightning][INFO] - GPU available: True, used: True
+[2021-01-11 16:05:03,292][lightning][INFO] - TPU available: None, using: 0 TPU cores
+[2021-01-11 16:05:03,292][lightning][INFO] - LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+[2021-01-11 16:05:03,576][lightning][INFO] - 
+  | Name    | Type       | Params
+---------------------------------------
+0 | encoder | Sequential | 497 K 
+---------------------------------------
+497 K     Trainable params
+0         Non-trainable params
+497 K     Total params
+[2021-01-11 16:08:47,830][lightning][INFO] - GPU available: True, used: True
+[2021-01-11 16:08:47,830][lightning][INFO] - TPU available: None, using: 0 TPU cores
+[2021-01-11 16:08:47,835][lightning][INFO] - LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+[2021-01-11 16:08:48,119][lightning][INFO] - 
+  | Name    | Type       | Params
+---------------------------------------
+0 | encoder | Sequential | 497 K 
+---------------------------------------
+497 K     Trainable params
+0         Non-trainable params
+497 K     Total params
+[2021-01-11 16:12:31,937][lightning][INFO] - GPU available: True, used: True
+[2021-01-11 16:12:31,937][lightning][INFO] - TPU available: None, using: 0 TPU cores
+[2021-01-11 16:12:31,937][lightning][INFO] - LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+[2021-01-11 16:12:32,217][lightning][INFO] - 
+  | Name    | Type       | Params
+---------------------------------------
+0 | encoder | Sequential | 497 K 
+---------------------------------------
+497 K     Trainable params
+0         Non-trainable params
+497 K     Total params
+[2021-01-11 16:16:17,080][lightning][INFO] - GPU available: True, used: True
+[2021-01-11 16:16:17,080][lightning][INFO] - TPU available: None, using: 0 TPU cores
+[2021-01-11 16:16:17,080][lightning][INFO] - LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+[2021-01-11 16:16:17,451][lightning][INFO] - 
+  | Name    | Type       | Params
+---------------------------------------
+0 | encoder | Sequential | 497 K 
+---------------------------------------
+497 K     Trainable params
+0         Non-trainable params
+497 K     Total params
+[2021-01-11 16:20:02,328][lightning][INFO] - GPU available: True, used: True
+[2021-01-11 16:20:02,328][lightning][INFO] - TPU available: None, using: 0 TPU cores
+[2021-01-11 16:20:02,333][lightning][INFO] - LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+[2021-01-11 16:20:02,608][lightning][INFO] - 
+  | Name    | Type       | Params
+---------------------------------------
+0 | encoder | Sequential | 497 K 
+---------------------------------------
+497 K     Trainable params
+0         Non-trainable params
+497 K     Total params
