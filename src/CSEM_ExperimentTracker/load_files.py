@@ -134,66 +134,28 @@ def load_lightning(folder):
     df = df.drop_duplicates()
     return df
 
-def load_sklear(folder):
+def load_sklearn(folder):
     dfs = []
     for dates in os.listdir(folder):
-        for t in os.listdir(os.path.join(folder, dates)):
-            exp_time = datetime.strptime(dates + " " + t, "%Y-%m-%d %H-%M-%S")
-            path = Path(os.path.join(folder, dates, t))
-            loggers = path.glob("**/results")
-            res = {x: [] for x in ("test_acc","train_acc","test_ce","train_ce")}
-            for logger in loggers:
-                run = logger.parent.name   
-                dfs.append(return_pandas_sklearn(exp_time,run, logger))
-                
-                if logger.parent.name.isdigit():
-                    run = int(logger.parent.name)
-                else:
-                    run = 0
+        for time in os.listdir(os.path.join(folder, dates)):
+            dfs.append(load_sklearn_experiment(folder,dates,time))
     return pd.concat(dfs,axis=1)
     
-
-
-    # elif folder == "multirun":
-    #     runs = []
-    #     results = []
-    #     configs = []
-    #     folder = folder
-    #     dfs = []
-    #     tuples = []
-    #     for dates in os.listdir(folder):
-    #         # y_m_d = date.fromisoformat(dates)
-    #         for t in os.listdir(os.path.join(folder, dates)):
-    #             for i in os.listdir(os.path.join(folder, dates, t)):
-    #                 if i.isdigit():
-    #                     # h_s_m = time.fromisoformat(t)
-    #                     exp_time = datetime.strptime(
-    #                         dates + " " + t, "%Y-%m-%d %H-%M-%S"
-    #                     )
-    #                     path = os.path.join(folder, dates, t, i)
-    #                     name_list = [x for x in os.listdir(path) if x[-4:] == "json"]
-    #                     if name_list:
-    #                         name = name_list[0]
-    #                         with open(os.path.join(path, name), "r") as fout:
-    #                             json_dict = json.load(fout)
-    #                         metrics = [
-    #                             x
-    #                             for x in ["metrics", "Metrics"]
-    #                             if x in json_dict.keys()
-    #                         ]
-    #                         if (
-    #                             not json_dict
-    #                             or not metrics
-    #                             or not json_dict[metrics[0]]
-    #                         ):
-    #                             continue
-    #                         dfs.append(create_exp_df(json_dict, metrics_key=metrics[0]))
-    #                         tuples.append((name[:-5], exp_time, i))
-        # index = pd.MultiIndex.from_tuples(tuples, names=("Name", "Exp_time", "Run"))
-        # df = pd.concat(dfs, axis=0, keys=index)
-        # df = df.drop_duplicates()
-        # return df
-
+def load_sklearn_experiment(folder,dates,time):
+    dfs = []
+    exp_time = datetime.strptime(dates + " " + time, "%Y-%m-%d %H-%M-%S")
+    path = Path(os.path.join(folder, dates, time))
+    loggers = path.glob("**/results")
+    res = {x: [] for x in ("test_acc","train_acc","test_ce","train_ce")}
+    for logger in loggers:
+        run = logger.parent.name   
+        dfs.append(return_pandas_sklearn(exp_time,run, logger))
+        
+        if logger.parent.name.isdigit():
+            run = int(logger.parent.name)
+        else:
+            run = 0
+    return pd.concat(dfs,axis=1)
 
 def _delete_empty_multirun(folder):
     for dates in os.listdir(folder):
@@ -228,7 +190,7 @@ def delete_empty_folder(folder):
 @click.command()
 @click.argument("folder")
 def save_df(folder):
-    df = load_results(folder)
+    df = load_lightning(folder)
     pd.to_pickle(df, "{}.df".format(folder))
 
 
