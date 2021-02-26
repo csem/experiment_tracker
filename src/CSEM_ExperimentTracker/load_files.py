@@ -10,6 +10,7 @@ import json
 import click
 from collections import defaultdict
 import numpy as np
+from flatten_dict import flatten
 
 
 def create_epoch_df(json_dict, exp_time, run):
@@ -52,19 +53,35 @@ def create_epoch_df(json_dict, exp_time, run):
             df.columns = new_columns
     return df
 
+# def expand_dict(nested_dict):
+#     fin_dict = {}
+#     for 
+#     for i 
+#     breakpoint()
+
+# def _finditem(obj, key):
+#     if key in obj: return obj[key]
+#     for k, v in obj.items():
+#         if isinstance(v,dict):
+#             return _finditem(v, key)  #added return statement
+
 
 def create_metadata_df(logger):
     with open(os.path.join(logger.parent, ".hydra/config.yaml"), "r") as metadata:
         metadata = yaml.safe_load(metadata)
-    df_hyp = pd.DataFrame.from_dict(metadata.get("hyperparameters", {}), orient="index")
+    exp_dict = flatten(metadata.get("hyperparameters", {}), reducer='path')
+    df_hyp = pd.DataFrame.from_dict(exp_dict, orient="index")
+
     if "hyperparameters" in metadata:
+        exp_dict = flatten(metadata.get("hyperparameters", {}), reducer='path')
         df_hyp.index = pd.MultiIndex.from_tuples(
-            [("hyp", x) for x in metadata["hyperparameters"]]
+            [("hyp", x) for x in exp_dict]
         )
 
     metadata.pop("hyperparameters", None)
-    df_other = pd.DataFrame.from_dict(metadata, orient="index")
-    df_other.index = pd.MultiIndex.from_tuples([("other", x) for x in metadata])
+    other = flatten(metadata, reducer='path')
+    df_other = pd.DataFrame.from_dict(other, orient="index")
+    df_other.index = pd.MultiIndex.from_tuples([("other", x) for x in other])
     return pd.concat([df_hyp, df_other])
 
 def return_pandas(exp_time, run, logger):
@@ -74,7 +91,6 @@ def return_pandas(exp_time, run, logger):
     if not len(df_epochs):
         return df_epochs
     else:
-
         df_res = create_metadata_df(logger)
         df_res = df_res[np.repeat(df_res.columns.values, len(df_epochs.columns))]
         df_res.columns = df_epochs.columns
@@ -129,7 +145,6 @@ def load_lightning(folder):
                 run = 0
             dfs.append(return_pandas(exp_time, run, logger))
             # logger = Path(logger)
-
     df = pd.concat(dfs, axis=1)
     df = df.drop_duplicates()
     return df
@@ -155,7 +170,11 @@ def load_sklearn_experiment(folder,dates,time):
             run = int(logger.parent.name)
         else:
             run = 0
-    return pd.concat(dfs,axis=1)
+    if len(dfs) > 0:
+        res = pd.concat(dfs,axis=1)
+    else:
+        res = pd.DataFrame()
+    return res
 
 def _delete_empty_multirun(folder):
     for dates in os.listdir(folder):

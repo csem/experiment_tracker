@@ -26,7 +26,9 @@ def compute_rolling_window_metrics(df, roll=1):
         fin.append(tmp_df)
     fin = pd.concat(fin,axis=1)
     fin.index = pd.MultiIndex.from_tuples([("metric",x) for x in fin.index])
-    return pd.concat([df,fin])
+    res = pd.concat([df,fin])
+    res = res[df.columns].copy()  
+    return res
    
     
 def list_available_dates(df):
@@ -64,14 +66,37 @@ def is_unique(s):
     a = s.to_numpy() 
     return (a[0] == a).all()
 
+def groupby_random_seed(df, keys_metrics):
+    values = list(df.index)
+    df_tmp = df.T
+    dicts = {}
+    available_lines = set()
+    for k in keys_metrics:
+        groups = []
+        bool_cond = k == df.columns.get_level_values(-1)
+        runs_col = [idx for idx, x in enumerate(bool_cond) if x]
+        for keys, values in df_tmp.groupby(by=list(df_tmp.columns)):
+            runs = set(values.index.droplevel([0,3]))
+            cols = [idx for idx, x in enumerate(df.columns.droplevel([0,3])) if (x in runs) and (idx in runs_col)]
+            groups.append(cols) 
+            available_lines.add(str(dict(values.iloc[0])))
+        dicts[k] = (groups)
+    return dicts, available_lines
+
 def drop_not_changing_row(df):
     return df.loc[~df.apply(is_unique,axis=1)]
 
+def return_runs_columns(df):
+    return list(OrderedDict.fromkeys([x[:3] for x in df.columns])) 
+
+def return_first_col_per_run(df):
+    exps = return_runs_columns(df)
+    return [list(df.columns.droplevel(-1)).index(x) for x in exps]
 
 def create_parallel_coordiante_dict(df, hyp, metric_labels=["val_loss", "val_accuracy"]):
     date_to_idx = {val:idx for idx, val in enumerate(sorted(set(df.columns.get_level_values(1))))}
-    exps = list(OrderedDict.fromkeys([x[:3] for x in df.columns])) 
-    imp_cols = [list(df.columns.droplevel(-1)).index(x) for x in exps]
+    exps = return_runs_columns(df)
+    imp_cols = return_first_col_per_run(df)
     metrics = set(df.columns.get_level_values(3))
     dimensions_date = list([
             dict(ticktext = [str(x)[5:16] for x in set(df.columns.get_level_values(1))],
@@ -79,6 +104,15 @@ def create_parallel_coordiante_dict(df, hyp, metric_labels=["val_loss", "val_acc
                  label = 'Date', values =[date_to_idx[x[1]] for x in exps]),
             dict(range = [0,max([x[-1] for x in exps])],
                  label = 'Run', values = [x[-1] for x in exps])])
+
+    values = [str(x) for x in df.loc["other","random_seed"].values]
+    unique_values = sorted(set(values))
+    val_to_idx = {val:idx for idx, val in enumerate(unique_values)}
+    random_seed = [dict(ticktext = [str(x)for x in unique_values],
+            tickvals = list(val_to_idx.values()),
+            label = "Random Seed", values =[val_to_idx[x] for x in values])]
+
+            
     dimension_hyp = []
     for row in hyp.index:
         if all([type(x) == int or type(x) == float for x in hyp.loc[row].values]):
@@ -109,13 +143,6 @@ def create_parallel_coordiante_dict(df, hyp, metric_labels=["val_loss", "val_acc
             entry = dict(range = [min(values),max(values)],
                     label = str(row), values = values)
         dimension_metrics.append(entry)
-        # else:
-        #     values = [str(x) for x in hyp.loc[row].values]
-        #     unique_values = sorted(set(values))
-        #     val_to_idx = {val:idx for idx, val in enumerate(unique_values)}
-        #     entry = dict(ticktext = [str(x)for x in unique_values],
-        #          tickvals = list(val_to_idx.values()),
-        #          label = str(row), values =[val_to_idx[x] for x in values])
 
-    dimensions = dimensions_date + dimension_hyp + dimension_metrics
+    dimensions = dimensions_date + random_seed + dimension_hyp + dimension_metrics
     return dimensions
