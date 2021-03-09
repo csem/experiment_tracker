@@ -1,3 +1,0 @@
-- hyperparameters.std_noise=False
-- hyperparameters.normalization=True
-- +data_source=NeuralNetwork_ED

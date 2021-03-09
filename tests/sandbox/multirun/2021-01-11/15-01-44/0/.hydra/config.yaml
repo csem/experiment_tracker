@@ -1,6 +1,0 @@
-hyperparameters:
-  std_noise: false
-  normalization: false
-number_of_workers: 0
-model_type: null
-data_source: NeuralNetwork_ED

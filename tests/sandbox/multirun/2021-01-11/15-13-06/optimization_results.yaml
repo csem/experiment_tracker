@@ -1,5 +1,0 @@
-optimizer: ax
-ax:
-  hyperparameters.std_noise: true
-  hyperparameters.normalization: true
-  +data_source: NeuralNetwork_ED

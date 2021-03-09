@@ -1,3 +1,0 @@
-- hyperparameters.std_noise=True
-- hyperparameters.normalization=True
-- +data_source=RandomForest_ICP_data
