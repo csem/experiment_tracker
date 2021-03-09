@@ -5,7 +5,7 @@ setup(
     name="csem_experimenttracker",
     version="0.0.1",
     author="CSEM",
-    packages=find_packages("src/CSEM_ExperimentTracker"),
+    packages=find_packages("src/"),
     package_dir={"": "src/"},
     install_requires=[
         "PyYAML",

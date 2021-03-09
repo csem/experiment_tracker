@@ -23,5 +23,5 @@ def header():
                 <p class="big-font">Experiment Tracker</p>"""
 
     col1.markdown(title, unsafe_allow_html=True)
-    p = Path(resources.__path__[0])
+    p = Path(resources.__path__._path[0])
     col2.write(render_svg(os.path.join(p,"logo_csem.svg")), unsafe_allow_html=True)

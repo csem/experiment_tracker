@@ -2,6 +2,7 @@ import plotly
 import plotly.graph_objects as go
 import plotly.express as px
 from . import utils
+import plotly.figure_factory as ff
 
 def plots_epochs(
     df,
@@ -33,6 +34,48 @@ def plots_epochs(
             )
 
     return fig
+
+
+
+def interactive_confusion_matrix(conf, order, colorscale="electric"):
+    x = order
+    y = order
+    z_text_train = [[str(y) for y in x] for x in conf.T]
+    z_text_test = [[str(y) for y in x] for x in conf.T]
+    hover1 = []
+    for z in range(len(z_text_train)):
+        hover1.append(
+            [
+                "Actual Class:"
+                + x[i]
+                + "<br>"
+                + "Predicted:"
+                + y[z]
+                + "<br>"
+                + "Instances:"
+                + str(
+                    conf[i, z]
+                )  # + "Variance " +  str(confusion_matrix_variance[i,z])
+                for i, _ in enumerate(z_text_train[z])
+            ]
+        )
+
+    fig1 = ff.create_annotated_heatmap(
+        z=conf.T,
+        x=x,
+        y=y,
+        text=hover1,
+        hoverinfo="text",
+        colorscale=colorscale,
+        name="Absolute",
+        visible=True,
+    )
+    fig1.update_yaxes(autorange="reversed")
+    fig1.update_layout(
+        width=600, height=500, autosize=False, margin=dict(t=0, b=0, l=0, r=0)
+    )
+    return fig1
+
 
 
 def create_parallel_coordiante_dict(df, hyp, metric_labels=["val_loss", "val_accuracy"], include_random_seed=True, cutoff_value=None):
