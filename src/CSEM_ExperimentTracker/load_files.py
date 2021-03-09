@@ -10,7 +10,7 @@ import json
 import click
 from collections import defaultdict
 import numpy as np
-from flatten_dict import flatten
+#from flatten_dict import flatten
 
 
 def create_epoch_df(json_dict, exp_time, run):
@@ -144,7 +144,6 @@ def load_lightning(folder):
             else:
                 run = 0
             dfs.append(return_pandas(exp_time, run, logger))
-            # logger = Path(logger)
     df = pd.concat(dfs, axis=1)
     df = df.drop_duplicates()
     return df

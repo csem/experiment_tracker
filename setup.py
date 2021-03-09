@@ -9,7 +9,9 @@ setup(
     package_dir={"": "src/"},
     install_requires=[
         "PyYAML",
-        "plotly"],
+        "plotly",
+        "streamlit",
+        "flatten-dict"],
     entry_points={
         "console_scripts": [
             "clean_folder=CSEM_ExperimentTracker.load_files:delete_empty_folder",

@@ -35,7 +35,7 @@ def plots_epochs(
     return fig
 
 
-def create_parallel_coordiante_dict(df, hyp, metric_labels=["val_loss", "val_accuracy"], include_random_seed=True):
+def create_parallel_coordiante_dict(df, hyp, metric_labels=["val_loss", "val_accuracy"], include_random_seed=True, cutoff_value=None):
     date_to_idx = {val:idx for idx, val in enumerate(sorted(set(df.columns.get_level_values(1))))}
     exps = utils.return_runs_columns(df)
     imp_cols = utils.return_first_col_per_run(df)
@@ -76,19 +76,28 @@ def create_parallel_coordiante_dict(df, hyp, metric_labels=["val_loss", "val_acc
     dimension_metrics = []
     for row in set(df.columns.get_level_values(3)):
         if not row in metric_labels:
-            continue
+            continue        
         if "loss" in row:
             imp = df.columns.get_level_values(3) == row
-            values = df_metric.loc["roll_min",imp].fillna(1).values
-            entry = dict(range = [max(values),min(values)],
+            values = df_metric.loc["roll_min",imp].values
+            if row == metric_labels[0] and cutoff_value:
+                max_val = cutoff_value
+            else:
+                max_val = max(values)
+            min_val = min(values)
+            entry = dict(range = [max_val,min_val],
                     label = str(row), values = values)
         elif "accuracy" in row:
             imp = df.columns.get_level_values(3) == row
-            values = df_metric.loc["roll_max",imp].fillna(0).values
-            entry = dict(range = [min(values),max(values)],
+            values = df_metric.loc["roll_max",imp].values
+            if row == metric_labels[0] and cutoff_value:
+                min_val = cutoff_value
+            else:
+                min_val = min(values)
+            max_val = max(values)
+            entry = dict(range = [min_val,max_val],
                     label = str(row), values = values)
         dimension_metrics.append(entry)
-
     if include_random_seed:
         dimensions = dimensions_date + random_seed + dimension_hyp + dimension_metrics
     else:

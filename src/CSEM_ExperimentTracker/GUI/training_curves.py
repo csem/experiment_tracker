@@ -3,7 +3,9 @@ import streamlit as st
 # working with sample data.
 import numpy as np
 import pandas as pd
-from CSEM_ExperimentTracker import load_files, plots, utils
+from .. import load_files, plots, utils
+from . import resources
+from . import gui_utils
 import plotly.graph_objects as go
 import os
 from shutil import rmtree
@@ -11,19 +13,19 @@ import plotly.express as px
 from pathlib import Path
 import matplotlib 
 from dataclasses import dataclass
+import os
 
 @dataclass
 class Options:
     metrics: list
-    data: list
     roll: int
 
 class Container:
     key =  ["val_loss","val_accuracy", "val_ht_accuracy"]
 
-
-
-def training_curves(fin_df,exp,opt):
+def training_curves(fin_df,exp, df_plot, opt):
+    groups, available_dates = utils.groupby_random_seed(exp,opt.metrics)
+    data = st.multiselect("Available data", options=sorted(list(available_dates)))
     fig = go.Figure()
     colors = px.colors.qualitative.Plotly
     color_counter = 0
@@ -35,7 +37,7 @@ def training_curves(fin_df,exp,opt):
         measurement = False 
     for metric in groups.keys():
         for to_average in groups[metric]:
-            if not str(dict(exp.iloc[:,to_average[0]])) in entries:
+            if not str(dict(exp.iloc[:,to_average[0]])) in data:
                 continue
             if len(str(dict(exp.iloc[:,to_average[0]]))) > 100:
                 name = ""
@@ -58,8 +60,8 @@ def training_curves(fin_df,exp,opt):
                 )
             )
         
-            y_upper = mean + data.std(axis=1,skipna=True,ddof=0).rolling(roll).mean().values
-            y_lower = mean - data.std(axis=1,skipna=True,ddof=0).rolling(roll).mean().values
+            y_upper = mean + data.std(axis=1,skipna=True,ddof=0).rolling(opt.roll).mean().values
+            y_lower = mean - data.std(axis=1,skipna=True,ddof=0).rolling(opt.roll).mean().values
             rgb_color = ",".join([str(x) for x in matplotlib.colors.to_rgba(color)[:3] + (0.2,)])
             for col in data.columns:
                 pos = data[col].dropna().index[-1]
@@ -74,24 +76,24 @@ def training_curves(fin_df,exp,opt):
                 hoverinfo="skip"))
             color_counter = (color_counter + 1) % len(colors)
 
-    fig.update_yaxes(type="log",range=[-0.2,0])
+    #fig.update_yaxes(type="log",range=[-0.2,0])
     fig.update_layout(
         autosize=True,
         width=1450,
         height=750)
     st.write(fig)
-
+    key = Container().key
     fig = go.Figure()
     for idx, i in enumerate(set(df_plot.columns.droplevel(-1))):
-        for x in key:
+        for x in opt.metrics:
             fig.add_trace(
                 go.Scatter(
                     x=list(df_plot.loc["epoch"].index),
-                    y=list(df_plot.loc["epoch", i + (x,)].rolling(roll).mean()),
+                    y=list(df_plot.loc["epoch", i + (x,)].rolling(opt.roll).mean()),
                     name=str(str(exp[i + (x,)])[:50])
                 )
             )
-    fig.update_yaxes(type="log",range=[-0.2,0])
+    #fig.update_yaxes(type="log",range=[-0.2,0])
     fig.update_layout(
         autosize=True,
         width=2000,
@@ -104,7 +106,8 @@ def parallel_coordinates(fin_df,exp,opt):
     groups, available_dates = utils.groupby_random_seed(exp,opt.metrics)
 
     type_exp = st.radio("Select type", options=["all","aggregate"])
-
+    
+    pool = []
     if type_exp == "all":
         for key in groups.keys():
             for val in groups[key]:
@@ -123,10 +126,16 @@ def parallel_coordinates(fin_df,exp,opt):
         df = pd.concat(dfs,axis=1)        
         hyp = hyp.iloc[:,group_fin]
     include_random_seed = type_exp == "all"
-    entries = plots.create_parallel_coordiante_dict(df,hyp, metric_labels=metrics, include_random_seed=include_random_seed)
+    cutoff = st.text_input(f"Cut off value for {opt.metrics[0]}", None)
+    try:
+        cutoff_value = float(cutoff)
+    except:
+        cutoff_value = None
+
+    entries = plots.create_parallel_coordiante_dict(df,hyp, metric_labels=opt.metrics, include_random_seed=include_random_seed, cutoff_value=cutoff_value)
     fig = go.Figure(data=
         go.Parcoords(
-            line = dict(color = df.loc[("metric","min")].values,
+            line = dict(color = df.loc[("metric","min")].replace(None).values,
                     colorscale = 'Jet',
                     showscale = True,
                     cmin = df.loc[("metric","min")].min(),
@@ -147,10 +156,10 @@ def fresh():
     if st.button('Recreate Dataset'):
         f = os.path.join(base_bath,folder)
         df = load_files.load_lightning(f)
-        pd.to_pickle(df, "{}.df".format(folder))
-    st.title("Current Results")
-    st.write("Results")
-    curr = pd.read_pickle(f"{folder}.df")
+        Path("data/fresh/").mkdir(parents=True, exist_ok=True)
+        pd.to_pickle(df, f"data/fresh/{folder}.df")
+    
+    curr = pd.read_pickle(f"data/fresh/{folder}.df")
         
     #TotalDf = st.write(pd.DataFrame(curr))
     possibilities = list(utils.list_available_dates(curr))
@@ -191,13 +200,11 @@ def stored():
     return fin_df
 
 
-if __name__=="__main__":
+def start():
     st.set_page_config(layout="wide")
-    col1, col2 = st.beta_columns(2)
-    col1.title("CSEM Experiment Tracker")
-    breakpoint()
-    col2.image("CSEM_Experiement")
-    type_exp = st.radio("Select source", options=["Fresh","Stored"])
+    gui_utils.header()
+    st.title('Load results')
+    type_exp = st.radio("Experiment collection:", options=["Fresh","Stored"])
     if type_exp == "Fresh":
         fin_df = fresh()
     else:
@@ -206,20 +213,20 @@ if __name__=="__main__":
         exp = utils.drop_not_changing_row(fin_df.loc["hyp"].dropna(how="all"))
     else:
         exp = fin_df.loc["hyp"].dropna(how="all")
+
+    st.title("Current Results")
     st.markdown('### Select rolling window length for computing statistics')
     roll = st.slider("Length", min_value=1, max_value=10, value=None, step=1, format=None, key=None)
     key = Container.key
-    metrics = st.multiselect("Select Metric", options=key, default=[key[-1]])
+    metrics = st.multiselect("Select Metric", options=key, default=[key[0]])
     df_plot = utils.subcolumn_group(fin_df,metrics)
-    groups, available_dates = utils.groupby_random_seed(exp,metrics)
-    data = st.multiselect("Available data", options=list(available_dates))
-    opt = Options(metrics=metrics, dates=data, roll=roll)
+    opt = Options(metrics=metrics, roll=roll)
     Curr = st.write(exp, width=2048, height=768)
     options = ["Training Curves", "Parallel Coordinate"]
     if options:
         visualizer = st.radio("Select Visualization Type", options, index=0, key=None)
     if visualizer ==  "Training Curves":
-        training_curves(fin_df,exp, opt)
+        training_curves(fin_df,exp, df_plot, opt)
     elif visualizer == "Parallel Coordinate":
         parallel_coordinates(fin_df,exp, opt) 
 
