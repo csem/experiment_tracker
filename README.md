@@ -9,7 +9,7 @@ Goal of this repo:
 
 # Terminology (Based on WandB):
 
-- **Project**: A collection of one or more experiments. (Each _Project_ has one or more days sub-folders, and then one or more hour sub-folders) 
+- **Project**: A collection of one or more experiments. (Each _Project_ has one or more days sub-folders, and then one or more time sub-folders) 
 - **Experiment**: A collection of one or more runs. Each experiment contains one or more runs subfolders 
 - **Runs**: A training of a learning algorithm plus its performance evaluation 
 
