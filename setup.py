@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 
 setup(
-    name="csem_experimenttracker",
+    name="csem_exptrack",
     version="0.0.1",
     author="CSEM",
     packages=find_packages("src"),

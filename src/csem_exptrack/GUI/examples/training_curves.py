@@ -14,11 +14,7 @@ from pathlib import Path
 import matplotlib 
 from dataclasses import dataclass
 import os
-
-@dataclass
-class Options:
-    metrics: list
-    roll: int
+from .. import dclasses
 
 class Container:
     key =  ["val_loss","val_accuracy", "val_ht_accuracy"]
