@@ -10,51 +10,6 @@ import json
 import click
 from collections import defaultdict
 import numpy as np
-from flatten_dict import flatten
-
-
-def create_epoch_df(json_dict, exp_time, run):
-    df = pd.DataFrame({})
-    for metric_key in ["Metrics", "metrics"]:
-        experience = json_dict.get(metric_key, None)
-        if experience is None or not len(experience) or not type(experience) == dict:
-            continue
-        else:
-            tmp_dict = {}
-            for key in experience.keys():
-                res = {}
-                for update in experience[key]:
-                    res[update[1]] = update[0]  # Epoch: Val
-                tmp_dict[key] = res
-                total_epochs = max(
-                    list(
-                        set(
-                            [
-                                epoch + 1
-                                for metric in tmp_dict.keys()
-                                for epoch in tmp_dict[metric].keys()
-                            ]
-                        )
-                    )
-                )
-            fin_dict = defaultdict(list)
-            for k in experience.keys():
-                for i in range(total_epochs):
-                    fin_dict[k].append(tmp_dict[k].get(i, float("inf")))
-            df = pd.DataFrame(fin_dict)
-            df.index = pd.MultiIndex.from_tuples(
-                ("epoch", x) for x in range(total_epochs)
-            )
-            #df.dropna(inplace=True)
-            new_columns = pd.MultiIndex.from_tuples(
-                [(json_dict["exp_name"], exp_time, run, x) for x in df.columns],
-                names=["Name", "Experiment_Time", "Run", "hyp"],
-            )
-            df.columns = new_columns
-    return df
-
-
-
 
 def return_pandas_sklearn(exp_time, run, logger):
     with open(logger, 'rb') as handle: 

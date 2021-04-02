@@ -3,7 +3,7 @@ import streamlit as st
 # working with sample data.
 import numpy as np
 import pandas as pd
-from ... import load_files
+from ...Process import lightning_loader
 from .. import resources
 from .. import gui_utils
 import plotly.graph_objects as go
@@ -155,7 +155,7 @@ def fresh():
     base_bath = "../gemintelligence/runs/"
     if st.button('Recreate Dataset'):
         f = os.path.join(base_bath,folder)
-        df = load_files.load_lightning(f)
+        df = lightning_loader.load_lightning(f)
         Path("data/fresh/").mkdir(parents=True, exist_ok=True)
         pd.to_pickle(df, f"data/fresh/{folder}.df")
     
