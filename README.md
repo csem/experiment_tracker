@@ -9,7 +9,7 @@ Goal of this repo:
 
 # Terminology (Based on WandB):
 
-_Project_: A collection of one or more experiments. (Each _Project_ has one or more days sub-folders, and then one or more hour sub-folders) \n
-_Experiment_: A collection of one or more runs. Each experiment contains one or more runs subfolders \n
-_runs_: A training of a learning algorithm plus its performance evaluation \n
+_Project_: A collection of one or more experiments. (Each _Project_ has one or more days sub-folders, and then one or more hour sub-folders) 
+_Experiment_: A collection of one or more runs. Each experiment contains one or more runs subfolders 
+_runs_: A training of a learning algorithm plus its performance evaluation 
 
