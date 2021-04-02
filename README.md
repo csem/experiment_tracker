@@ -5,4 +5,4 @@ Then install the repo as:
 
 Goal of this repo: 
 1) Offer a way to process hydra-like folder structure 
-2) Plot results
+2) Offer a comprehensive set of plots and template with Streamlit
