@@ -13,4 +13,4 @@ Goal of this repo:
 - **Experiment**: A collection of one or more runs. Each experiment contains one or more runs subfolders 
 - **Run**: A training of a learning algorithm plus its performance evaluation 
 
-
+# Structure of the resulting pandas dataframe 
