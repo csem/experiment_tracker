@@ -14,3 +14,4 @@ Goal of this repo:
 - **Run**: A training of a learning algorithm plus its performance evaluation 
 
 # Structure of the resulting pandas dataframe 
+df_example contains an example of pandas dataframe  end result
