@@ -67,8 +67,10 @@ def is_unique(s):
     return (a[0] == a).all()
 
 def groupby_random_seed(df, keys_metrics):
+    """This function groups runs that shares the random seed"""
     values = list(df.index)
-    df_tmp = df.T
+    df_tmp = df.drop(["epoch"]).T
+    df_tmp.dropna(axis=1,inplace=True)
     groups = {}
     available_lines = set()
     for k in keys_metrics:
@@ -76,6 +78,7 @@ def groupby_random_seed(df, keys_metrics):
         bool_cond = k == df.columns.get_level_values(-1)
         runs_col = [idx for idx, x in enumerate(bool_cond) if x]
         for keys, values in df_tmp.groupby(by=list(df_tmp.columns)):
+            
             runs = set(values.index.droplevel([0,3]))
             cols = [idx for idx, x in enumerate(df.columns.droplevel([0,3])) if (x in runs) and (idx in runs_col)]
             group.append(cols) 

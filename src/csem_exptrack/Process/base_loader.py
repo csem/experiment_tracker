@@ -43,28 +43,36 @@ class BaseLoader():
 def create_metadata_df(path: Path):
     with open(os.path.join(path.parent, ".hydra/config.yaml"), "r") as metadata:
         metadata = yaml.safe_load(metadata)
-    hyp_dict = flatten(metadata.get("hyperparameters", {}), reducer='path')
-    df_hyp = pd.DataFrame.from_dict(hyp_dict, orient="index")
-
-    if "hyperparameters" in metadata:
-        exp_dict = flatten(metadata.get("hyperparameters", {}), reducer='path')
-        df_hyp.index = pd.MultiIndex.from_tuples(
-            [("hyp", x) for x in exp_dict]
-        )
     
-    dateset_dict = flatten(metadata.get("dataset", {}), reducer='path')
-    df_dataset = pd.DataFrame.from_dict(dateset_dict, orient="index")
-    if "dataset" in metadata:
-        dateset_dict = flatten(metadata.get("dataset", {}), reducer='path')
-        df_dataset.index = pd.MultiIndex.from_tuples(
-            [("dataset", x) for x in dateset_dict]
-        )
+    dfs = []
+    for category in ["hyperparameters","dataset"]:
 
-    metadata.pop("hyperparameters", None)
+        curr_dict = flatten(metadata.get(category, {}), reducer='path')
+        df_curr = pd.DataFrame.from_dict(curr_dict, orient="index")
+
+        if category in metadata:
+            exp_dict = flatten(metadata.get(category, {}), reducer='path')
+            df_curr.index = pd.MultiIndex.from_tuples(
+                [(category, x) for x in exp_dict]
+            )
+        
+        dfs.append(df_curr)
+        metadata.pop(category, None)
+    
+    # dateset_dict = flatten(metadata.get("dataset", {}), reducer='path')
+    # df_dataset = pd.DataFrame.from_dict(dateset_dict, orient="index")
+    # if "dataset" in metadata:
+    #     dateset_dict = flatten(metadata.get("dataset", {}), reducer='path')
+    #     df_dataset.index = pd.MultiIndex.from_tuples(
+    #         [("dataset", x) for x in dateset_dict]
+    #     )
+
+    
     other = flatten(metadata, reducer='path')
     df_other = pd.DataFrame.from_dict(other, orient="index")
     df_other.index = pd.MultiIndex.from_tuples([("other", x) for x in other])
-    return pd.concat([df_hyp, df_dataset, df_other])
+    dfs.append(df_other)
+    return pd.concat(dfs)
 
 
 @click.command()
