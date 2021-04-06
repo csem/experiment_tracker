@@ -3,8 +3,7 @@ import streamlit as st
 # working with sample data.
 import numpy as np
 import pandas as pd
-from ... import load_files
-from .. import resources
+from ... import load_files, utils, plots
 from .. import gui_utils
 import plotly.graph_objects as go
 import os

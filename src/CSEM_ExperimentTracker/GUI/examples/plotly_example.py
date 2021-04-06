@@ -10,7 +10,9 @@ import os
 import pickle
 from shutil import rmtree
 from plotly.subplots import make_subplots
+import plotly
 from copy import deepcopy
+from csem_gemintelligence.learning.torch_lib.preprocessing import multiplicative_scatter_correction, get_rid_of_saturation, derivative_method
 
 @st.cache()
 def load_data(path):
@@ -22,13 +24,75 @@ def load_data(path):
 def load_experiment(f,date,time):
     return load_files.load_sklearn_experiment(f,date,time)
 
-
+@st.cache()
+def normalization(data,method):
+    if method == "normal":
+        data[[("UV_DATA","A", x) for x in data["UV_DATA"]["A"].columns]] = multiplicative_scatter_correction(data.loc[:,("UV_DATA","A")].copy()).values
+        data[[("UV_DATA","B", x) for x in data["UV_DATA"]["B"].columns]] = multiplicative_scatter_correction(data.loc[:,("UV_DATA","B")].copy()).values
+    elif method == "derivative":
+        data[[("UV_DATA","A", x) for x in data["UV_DATA"]["A"].columns]] = derivative_method(data.loc[:,("UV_DATA","A")].copy()).values
+        data[[("UV_DATA","B", x) for x in data["UV_DATA"]["B"].columns]] = derivative_method(data.loc[:,("UV_DATA","B")].copy()).values
+    return data
 
 def start(path_data):
     st.set_page_config(layout="wide")
     gui_utils.header()
-    st.title("End Results Cross Validation")
-    folder = st.selectbox("Select Experiment Type", options=["STACKED","UV_DATA_RESNET","BERTINO_ALL_IN_ONE","ED_DATA","RandomForest_ED_DATA","RandomForest_ICP_DATA","UV_DATA_RESNET_Origin_debug"], index=1)
+    st.title("Analysis of possible augmentation techniques of UV data")
+    raw_data = pd.read_pickle(path_data)
+    raw_data = raw_data.loc[~raw_data["UV_DATA"].isna().all(axis=1)]
+    ignore_mask_a = raw_data[("UV_DATA","A")].drop_duplicates() > 9.9
+    ignore_mask_b = raw_data[("UV_DATA","B")].drop_duplicates() > 9.9
+    method_normalization = st.selectbox("Select Normalization Type", options=["None","derivative","normal"], index=1)
+    data = normalization(raw_data.copy(),method_normalization)
+    method = st.selectbox("Ignore saturation", options=[True, False], index=1)
+    uv = data["UV_DATA"].drop_duplicates()
+    if st.button('sample'):
+        pass
+    curr = uv.sample()
+    a = curr["A"].values.squeeze()
+    b = curr["B"].values.squeeze()
+    if method:
+        try:
+            a[ignore_mask_a.loc[curr.index].values.squeeze()] = 0
+            b[ignore_mask_b.loc[curr.index].values.squeeze()] = 0
+            if method_normalization=="derivative":
+                a[abs(a)>0.5] = 0
+                b[abs(b)>0.5] = 0
+        except:
+            breakpoint()
+    t = np.arange(0, len(a))
+
+    fig = go.Figure()
+
+    st.write(f"ID is {str(curr.index.values[0])}")
+    # Add traces
+    fig.add_trace(go.Scatter(x=t, y=a,
+                        mode='lines',
+                        name='A'))
+    fig.add_trace(go.Scatter(x=t, y=b,
+                        mode='lines',
+                        name='B'))
+
+    st.write(fig)
+
+    fig = go.Figure()
+    curr_raw = raw_data["UV_DATA"].loc[curr.index]
+    a_raw = curr_raw["A"].values.squeeze()
+    b_raw = curr_raw["B"].values.squeeze()
+    if method:
+        try:
+            a_raw[ignore_mask_a.loc[curr.index].values.squeeze()] = 0
+            b_raw[ignore_mask_b.loc[curr.index].values.squeeze()] = 0
+        except:
+            breakpoint()
+    fig.add_trace(go.Scatter(x=t, y=a_raw,
+                        mode='lines',
+                        name='A'))
+    fig.add_trace(go.Scatter(x=t, y=b_raw,
+                        mode='lines',
+                        name='B'))
+
+    st.write(fig)
     dates = os.listdir(os.path.join(path_data,folder))
     dates = [x for x in dates if os.listdir(os.path.join(path_data,folder,x))]
     date = st.selectbox("Select Date", options=dates)
@@ -55,20 +119,14 @@ def start(path_data):
             source = st.selectbox("Select source", options=sources)
             results.df = results.return_only_stones_from(source=source)
 
-        exclude = st.radio("Filter Results whose gt is not sure", options=[True,False])
         st.markdown('### Selet prediction threshold')
         roll = st.slider("Threshold", min_value=0.0, max_value=0.98, value=None, step=0.05, format=None, key=None)
         df = results.return_subsect_roll(roll)
         
-        matrices, dropped_index = results.confusion_matrices(df=df, exclude_false_val=exclude)
-        if exclude:
-            considered_stones = len(df[df[("Considered","Validation")]])
-        else:
-            considered_stones = len(df)
+        matrices, dropped_index = results.confusion_matrices(df=df)
         buffer = []
-        buffer = buffer + ["### Stone considered {} \n".format(considered_stones)]
-        buffer = buffer + ["### % of Stones Considered: {}% \n".format(100*np.round(considered_stones/len(results.df),2))]
-        buffer = buffer + ["### Results Overview \n",  "Accuracy: {}  \n F1 Score: {}  \n Cross Entropy {}  \n".format(results.compute_accuracy_score(df,exclude_false_val = exclude),results.compute_F1_score(df,exclude_false_val = exclude),results.compute_cross_entropy(df,exclude_false_val = exclude))]
+        buffer = buffer + ["### Stones Considered: {}% \n".format(100*np.round(len(df)/len(results.df),2))]
+        buffer = buffer + ["### Results Overview \n",  "Accuracy: {}  \n F1 Score: {}  \n Cross Entropy {}  \n".format(results.compute_accuracy_score(df),results.compute_F1_score(df),results.compute_cross_entropy(df))]
         # st.write("### Results Overview \n",  "Accuracy: {}  \n F1 Score: {}  \n Cross Entropy {}  \n".format(results.compute_accuracy_score(df),results.compute_F1_score(df),results.compute_cross_entropy(df)).
         # )
 

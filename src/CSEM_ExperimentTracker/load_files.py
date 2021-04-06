@@ -12,7 +12,6 @@ from collections import defaultdict
 import numpy as np
 from flatten_dict import flatten
 
-
 def create_epoch_df(json_dict, exp_time, run):
     df = pd.DataFrame({})
     for metric_key in ["Metrics", "metrics"]:
@@ -52,18 +51,6 @@ def create_epoch_df(json_dict, exp_time, run):
             )
             df.columns = new_columns
     return df
-
-# def expand_dict(nested_dict):
-#     fin_dict = {}
-#     for 
-#     for i 
-#     breakpoint()
-
-# def _finditem(obj, key):
-#     if key in obj: return obj[key]
-#     for k, v in obj.items():
-#         if isinstance(v,dict):
-#             return _finditem(v, key)  #added return statement
 
 
 def create_metadata_df(logger):
