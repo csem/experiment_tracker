@@ -26,6 +26,15 @@ Goal of this repo:
 
 # How to use it
 This module offers a series of utility functions and templates for creating your own GUI.
+You should be some what familiar with Streamlit. If you aren't, just spend 20 minutes looking at https://docs.streamlit.io/en/stable/getting_started.html
+
+CSEM_ExperimentTracker is module tha comprises of two main sub-modules (plus a bunch of utilities .py files)
+*GUI 
+*Process
+
+In the GUI sub-module you will find modules about implementing GUI gadget and utilities.
+In the process sub-module you will find modules about processing hydra like structure.  base_loader.py is the abstract class that needs to be implemented depeding for your specific type of experiment. You can find this already for lightning.
+
 Start by importing `CSEM_ExperimentTracker`
 
 # Terminology (Based on WandB):
