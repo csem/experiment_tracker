@@ -1,5 +1,7 @@
-Idea:
-This repo should be added as a submodule to any ML project using Hydra for result visualization.
+# Why
+For simplifying visualitation of results collected with Hydra.
+
+# Installation 
 
 For adding CSEM_ExperimentTracker as a submodules in a repo for the first time just run:
 `git submodule add git@gitlab.csem.local:611/csem_experimenttracker.git`
@@ -21,6 +23,9 @@ Then install the repo as:
 Goal of this repo: 
 1) Offer a way to process hydra-like folder structure 
 2) Offer a comprehensive set of plots and template with Streamlit
+
+# How to use it
+This repo offers a series of utility functions and templates for creating your own GUI.
 
 # Terminology (Based on WandB):
 
