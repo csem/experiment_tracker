@@ -1,5 +1,16 @@
 Idea:
 This repo should be added as a submodule to any ML project using Hydra for result visualization.
+
+For adding CSEM_ExperimentTracker as a submodules in a repo for the first time just run:
+`git submodule add git@gitlab.csem.local:611/csem_experimenttracker.git`
+Then add and commit the two files 
+
+```
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+        new file:   .gitmodules
+        new file:   csem_experimenttracker
+```
 Then install the repo as:
 `pip install -e csem_experimenttracker/`
 
