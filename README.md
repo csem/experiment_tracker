@@ -25,7 +25,8 @@ Goal of this repo:
 2) Offer a comprehensive set of plots and template with Streamlit
 
 # How to use it
-This repo offers a series of utility functions and templates for creating your own GUI.
+This module offers a series of utility functions and templates for creating your own GUI.
+Start by importing `CSEM_ExperimentTracker`
 
 # Terminology (Based on WandB):
 
