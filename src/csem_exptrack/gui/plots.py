@@ -1,7 +1,7 @@
 import plotly
 import plotly.graph_objects as go
 import plotly.express as px
-from . import utils
+from .. import utils
 import plotly.figure_factory as ff
 
 def plots_epochs(

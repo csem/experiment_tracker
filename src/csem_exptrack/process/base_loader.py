@@ -29,6 +29,7 @@ class BaseLoader():
         h_m_s = time.strftime("%H-%M-%S")
         path = Path(os.path.join(folder, date, h_m_s))
         runs = os.listdir(path)
+        runs = [x for x in runs if x.isdigit()]
         if not runs:
             print(f"WARNING: No runs for {time}")
         for run in runs:
@@ -39,40 +40,31 @@ class BaseLoader():
     def return_pandas(self,path) -> pd.DataFrame:
         NotImplementedError
 
-
-def create_metadata_df(path: Path):
-    with open(os.path.join(path.parent, ".hydra/config.yaml"), "r") as metadata:
-        metadata = yaml.safe_load(metadata)
-    
-    dfs = []
-    for category in ["hyperparameters","dataset"]:
-
-        curr_dict = flatten(metadata.get(category, {}), reducer='path')
-        df_curr = pd.DataFrame.from_dict(curr_dict, orient="index")
-
-        if category in metadata:
-            exp_dict = flatten(metadata.get(category, {}), reducer='path')
-            df_curr.index = pd.MultiIndex.from_tuples(
-                [(category, x) for x in exp_dict]
-            )
+    @staticmethod
+    def create_metadata_df(path: Path):
+        with open(os.path.join(path, ".hydra/config.yaml"), "r") as metadata:
+            metadata = yaml.safe_load(metadata)
         
-        dfs.append(df_curr)
-        metadata.pop(category, None)
-    
-    # dateset_dict = flatten(metadata.get("dataset", {}), reducer='path')
-    # df_dataset = pd.DataFrame.from_dict(dateset_dict, orient="index")
-    # if "dataset" in metadata:
-    #     dateset_dict = flatten(metadata.get("dataset", {}), reducer='path')
-    #     df_dataset.index = pd.MultiIndex.from_tuples(
-    #         [("dataset", x) for x in dateset_dict]
-    #     )
+        dfs = []
+        for category in ["hyperparameters","dataset"]:
 
-    
-    other = flatten(metadata, reducer='path')
-    df_other = pd.DataFrame.from_dict(other, orient="index")
-    df_other.index = pd.MultiIndex.from_tuples([("other", x) for x in other])
-    dfs.append(df_other)
-    return pd.concat(dfs)
+            curr_dict = flatten(metadata.get(category, {}), reducer='path')
+            df_curr = pd.DataFrame.from_dict(curr_dict, orient="index")
+
+            if category in metadata:
+                exp_dict = flatten(metadata.get(category, {}), reducer='path')
+                df_curr.index = pd.MultiIndex.from_tuples(
+                    [(category, x) for x in exp_dict]
+                )
+            
+            dfs.append(df_curr)
+            metadata.pop(category, None)
+        
+        other = flatten(metadata, reducer='path')
+        df_other = pd.DataFrame.from_dict(other, orient="index")
+        df_other.index = pd.MultiIndex.from_tuples([("other", x) for x in other])
+        dfs.append(df_other)
+        return pd.concat(dfs)
 
 
 @click.command()

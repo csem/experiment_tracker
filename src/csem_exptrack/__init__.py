@@ -1,4 +1,4 @@
-from . import GUI
-from . import Process
+from . import gui
+from . import process
 from . import utils 
-from . import Loggers
+from . import loggers
