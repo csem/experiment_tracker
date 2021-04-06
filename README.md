@@ -11,6 +11,10 @@ Changes to be committed:
         new file:   .gitmodules
         new file:   csem_experimenttracker
 ```
+
+When cloning the repo with a submodule remember to add `--recurse-submodules --remote-submodules` to the git clone command. Otherwise submodules will not be used.
+
+
 Then install the repo as:
 `pip install -e csem_experimenttracker/`
 
