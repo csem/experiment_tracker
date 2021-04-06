@@ -1,6 +1,8 @@
 import pandas as pd
 import pdb
 from collections import OrderedDict
+import numpy as np
+
 
 def topk(series, k=5, min=True):
     target = series.sort_values(ascending=min).index.droplevel(-1)
@@ -97,3 +99,10 @@ def return_first_col_per_run(df):
     exps = return_runs_columns(df)
     return [list(df.columns.droplevel(-1)).index(x) for x in exps]
 
+
+def normalize_confusion_matrix(cm, mode="recall"):
+    if mode == "recall":
+        cm = np.round(cm.astype("float") / cm.sum(axis=1)[:, np.newaxis], 2)
+    else:
+        cm = np.round(cm.astype("float") / cm.sum(axis=0)[np.newaxis, :], 2)
+    return cm
