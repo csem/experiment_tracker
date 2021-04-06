@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="csem_exptrack",
-    version="0.0.1",
+    version="0.0.3",
     author="CSEM",
     packages=find_packages("src"),
     package_dir={"": "src"},
@@ -12,10 +12,10 @@ setup(
         "plotly",
         "streamlit",
         "flatten-dict"],
-    entry_points={
-        "console_scripts": [
-            "clean_folder=CSEM_ExperimentTracker.load_files:delete_empty_folder",
-            "save_df = CSEM_ExperimentTracker.load_files:save_df",
-        ]
-    },
+    # entry_points={
+    #     "console_scripts": [
+    #         "clean_folder=CSEM_ExperimentTracker.load_files:delete_empty_folder",
+    #         "save_df = CSEM_ExperimentTracker.load_files:save_df",
+    #     ]
+    # },
 )

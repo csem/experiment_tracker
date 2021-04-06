@@ -13,6 +13,7 @@ def render_svg(path):
     return html
 
 def header():
+    st.set_page_config(layout="wide")
     col1, col2 = st.beta_columns(2)
     title = """
                 <style>
