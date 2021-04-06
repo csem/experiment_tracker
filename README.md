@@ -33,7 +33,7 @@ CSEM_ExperimentTracker is module tha comprises of two main sub-modules (plus a b
 
 - Process. Here you will modules processing hydra like structure.  base_loader.py is the abstract class that needs to be implemented depeding for your specific type of experiment. You can find this already for lightning.
 
-Start by importing `CSEM_ExperimentTracker`
+Start by importing `csem_exptrack`
 
 # Terminology (Based on WandB):
 
