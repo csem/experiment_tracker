@@ -47,9 +47,9 @@ Start by importing `csem_exptrack`
 If you want to use the parallel coordinate plots all yours hyperparameters should be indented and included in hyperparameters. Example:
 ```
 hyperparameters:
-  lm_bs: 128 # try between 128 and bigger
-  lm_last_layer_epochs: 7 # try between 1 and 20
-  lm_all_layers_epochs: 6 # try between 1 and 20
+  lm_bs: 128 
+  lm_last_layer_epochs: 7
+  lm_all_layers_epochs: 6
 ```
 
 Adding a key called random_seed will allow you to average plots
