@@ -57,4 +57,5 @@ Adding a key called random_seed will allow you to average plots.
 Metrics should be added to the resulting pandas dataframe creating new rows with levels ("metrics",NameOfYourMetric)
 
 # Structure of the resulting pandas dataframe 
-The base loader returns an hierchical pandas dataframe. Each row has two levels. Each column has one or two levels depending whether you are loading an experiment or multiple experiments over more dates
+The base loader returns an hierchical pandas dataframe. This contains all parameters, plus paths to import files. The name of this pandas dataframe is param_df
+In addition to this, each plotting function requires another pandas dataframe, called df_parallel_coordinate
