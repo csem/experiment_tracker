@@ -52,7 +52,9 @@ hyperparameters:
   lm_all_layers_epochs: 6
 ```
 
-Adding a key called random_seed will allow you to average plots
+Adding a key called random_seed will allow you to average plots.
+
+Metrics should be added to the resulting pandas dataframe creating new rows with levels ("metrics",NameOfYourMetric)
 
 # Structure of the resulting pandas dataframe 
 The base loader returns an hierchical pandas dataframe. Each row has two levels. Each column has one or two levels depending whether you are loading an experiment or multiple experiments over more dates
