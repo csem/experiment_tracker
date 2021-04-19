@@ -55,4 +55,4 @@ hyperparameters:
 Adding a key called random_seed will allow you to average plots
 
 # Structure of the resulting pandas dataframe 
-df_example contains an example of pandas dataframe  end result
+The base loader returns an hierchical pandas dataframe. Each row has two levels. Each column has one or two levels depending whether you are loading an experiment or multiple experiments over more dates
