@@ -70,20 +70,23 @@ def is_unique(s):
 
 def groupby_random_seed(df, keys_metrics):
     """This function groups runs that shares the random seed"""
-    values = list(df.index)
-    df_tmp = df.drop(["epoch","metric"]).T
+    values = list(df.index.droplevel([1]))
+    if "epoch" in values:
+        df = df.drop("epoch")
+    if "metrics" in values:
+        df = df.drop("metrics")
+    if "metric" in values:
+        df = df.drop("metric") 
+    df_tmp = df.T
     df_tmp.dropna(axis=1,inplace=True)
     groups = {}
     available_lines = set()
     for k in keys_metrics:
         group = []
-        bool_cond = k == df.columns.get_level_values(-1)
-        runs_col = [idx for idx, x in enumerate(bool_cond) if x]
-        imp_cols = list(df_tmp.columns)
-        imp_cols.remove(('other','random_seed'))
-        for keys, values in df_tmp.groupby(by=imp_cols):
-            runs = set(values.index.droplevel([0,3]))
-            cols = [idx for idx, x in enumerate(df.columns.droplevel([0,3])) if (x in runs) and (idx in runs_col)]
+        imp_idx = [("hyperparameters",x) for x in  list(df.loc["hyperparameters"].index)]
+        for _, values in df_tmp.groupby(by=imp_idx):
+            runs = set(values.index)
+            cols = [idx for idx, x in enumerate(df.columns) if (x in runs)]
             group.append(cols) 
             available_lines.add(str(dict(values.iloc[0])))
         groups[k] = (group)
@@ -92,11 +95,12 @@ def groupby_random_seed(df, keys_metrics):
 def drop_not_changing_row(df):
     return df.loc[~df.apply(is_unique,axis=1)]
 
-def return_runs_columns(df):
-    return list(OrderedDict.fromkeys([x[:3] for x in df.columns])) 
+def return_exps_date(df: pd.DataFrame):
+    """Given a dataframe with columns format: "Datetime"/"Run" returns a list of all datetimes"""
+    return list(OrderedDict.fromkeys([x[0] for x in df.columns])) 
 
 def return_first_col_per_run(df):
-    exps = return_runs_columns(df)
+    exps = return_exps_date(df)
     return [list(df.columns.droplevel(-1)).index(x) for x in exps]
 
 

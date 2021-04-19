@@ -3,6 +3,9 @@ import plotly.graph_objects as go
 import plotly.express as px
 from .. import utils
 import plotly.figure_factory as ff
+import numpy as np
+import pandas as pd
+import streamlit as st
 
 def plots_epochs(
     df,
@@ -76,37 +79,57 @@ def interactive_confusion_matrix(conf, order, colorscale="electric"):
     )
     return fig1
 
+def parallel_coordinates(param_df:pd.DataFrame,perf_df:pd.DataFrame):    
+    entries = _create_parallel_coordiante_dict(param_df,perf_df)
+    fig = go.Figure(data=
+        go.Parcoords(
+            line = dict(color = perf_df.iloc[:,0].replace(None).values,
+                    colorscale = 'Jet',
+                    showscale = True,
+                    cmin = perf_df.iloc[:,0].min(),
+                    cmax = perf_df.iloc[:,0].max()),
+            dimensions = entries
+        )
+    )
+    fig.update_layout(
+        autosize=True,
+        width=2000,
+        height=1000)
+    st.write(fig)
 
+def _create_parallel_coordiante_dict(param_df, perf_df):
+    cols = sorted(set(param_df.columns.get_level_values(1))) 
+    date_to_idx = {val:idx for idx, val in enumerate(set(param_df.columns.get_level_values(0)))}
+    date_runs = param_df.columns.get_level_values(0)
+    runs = param_df.columns.get_level_values(1)
+    dimensions_date = [
+            #Dates
+            dict(ticktext = [str(x)[5:16] for x in set(param_df.columns.get_level_values(0))],
+                tickvals = list(date_to_idx.values()),
+                label = 'Date', values =[date_to_idx[x] for x in date_runs]),
+            
+            #Runs
+            dict(range = [0,max([x for x in runs])],
+                 label = 'Run', values = [x for x in runs])]
 
-def create_parallel_coordiante_dict(df, hyp, metric_labels=["val_loss", "val_accuracy"], include_random_seed=True, cutoff_value=None):
-    date_to_idx = {val:idx for idx, val in enumerate(sorted(set(df.columns.get_level_values(1))))}
-    exps = utils.return_runs_columns(df)
-    imp_cols = utils.return_first_col_per_run(df)
-    metrics = set(df.columns.get_level_values(3))
-    dimensions_date = list([
-            dict(ticktext = [str(x)[5:16] for x in set(df.columns.get_level_values(1))],
-                 tickvals = list(date_to_idx.values()),
-                 label = 'Date', values =[date_to_idx[x[1]] for x in exps]),
-            dict(range = [0,max([x[-1] for x in exps])],
-                 label = 'Run', values = [x[-1] for x in exps])])
-
-    
-    if include_random_seed:
-        values = [str(x) for x in df.loc["other","random_seed"].values]
+    if ("other","random_seed") in param_df.index:
+        values = [str(x) for x in param_df.loc["other","random_seed"].values]
         unique_values = sorted(set(values))
         val_to_idx = {val:idx for idx, val in enumerate(unique_values)}
         random_seed = [dict(ticktext = [str(x)for x in unique_values],
                 tickvals = list(val_to_idx.values()),
                 label = "Random Seed", values =[val_to_idx[x] for x in values])]
-
+    else:
+        random_seed = [None]
             
     dimension_hyp = []
-    for row in hyp.index:
-        if all([type(x) == int or type(x) == float for x in hyp.loc[row].values]):
-            entry = dict(range = [min(hyp.loc[row].values),max(hyp.loc[row].values)],
-                 label = str(row), values = hyp.loc[row].iloc[imp_cols].values)
+    hyp_df = param_df.loc["hyperparameters"]
+    for row in hyp_df.index:
+        if all([type(x) == int or type(x) == float for x in hyp_df.loc[row].values]):
+            entry = dict(range = [min(hyp_df.loc[row].values),max(hyp_df.loc[row].values)],
+                 label = str(row), values = hyp_df.loc[row].values)
         else:
-            values = [str(x) for x in hyp.loc[row].iloc[imp_cols].values]
+            values = [str(x) for x in hyp_df.loc[row].values]
             unique_values = sorted(set(values))
             val_to_idx = {val:idx for idx, val in enumerate(unique_values)}
             entry = dict(ticktext = [str(x)for x in unique_values],
@@ -114,35 +137,14 @@ def create_parallel_coordiante_dict(df, hyp, metric_labels=["val_loss", "val_acc
                  label = str(row), values =[val_to_idx[x] for x in values])
         dimension_hyp.append(entry)
 
-
-    df_metric = df.loc["metric"]
     dimension_metrics = []
-    for row in set(df.columns.get_level_values(3)):
-        if not row in metric_labels:
-            continue        
-        if "loss" in row:
-            imp = df.columns.get_level_values(3) == row
-            values = df_metric.loc["roll_min",imp].values
-            if row == metric_labels[0] and cutoff_value:
-                max_val = cutoff_value
-            else:
-                max_val = max(values)
-            min_val = min(values)
-            entry = dict(range = [max_val,min_val],
-                    label = str(row), values = values)
-        elif "accuracy" in row:
-            imp = df.columns.get_level_values(3) == row
-            values = df_metric.loc["roll_max",imp].values
-            if row == metric_labels[0] and cutoff_value:
-                min_val = cutoff_value
-            else:
-                min_val = min(values)
-            max_val = max(values)
-            entry = dict(range = [min_val,max_val],
-                    label = str(row), values = values)
+    for col in perf_df.columns:
+        values = perf_df.loc[:,col].values
+        min_val = min(values)
+        max_val = max(values)
+        entry = dict(range = [min_val,max_val],
+                label = str(col), values = values)
         dimension_metrics.append(entry)
-    if include_random_seed:
-        dimensions = dimensions_date + random_seed + dimension_hyp + dimension_metrics
-    else:
-        dimensions = dimensions_date + dimension_hyp + dimension_metrics
+    dimensions = dimensions_date + random_seed + dimension_hyp + dimension_metrics
+    dimensions = [x for x in dimensions if x]
     return dimensions

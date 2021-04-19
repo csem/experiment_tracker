@@ -16,9 +16,13 @@ class BaseLoader():
     def load_folder(self, folder: Path):
         dfs = []
         for dates, h_m_s in utils.traverse_folders(folder):
-            exp_time = datetime.strptime(dates + " " + h_m_s, "%Y-%m-%d %H-%M-%S")
+            str_time = dates + " " + h_m_s
+            exp_time = datetime.strptime(str_time, "%Y-%m-%d %H-%M-%S")
             curr_df = self.load_experiment(folder, exp_time)
+            t = pd.MultiIndex.from_tuples([(str_time,x) for x in curr_df.columns])
+            curr_df.columns = t
             dfs.append(curr_df)
+        
         df = pd.concat(dfs, axis=1)
         df = df.drop_duplicates()
         return df
@@ -34,7 +38,10 @@ class BaseLoader():
             print(f"WARNING: No runs for {time}")
         for run in runs:
             curr_path = Path(os.path.join(path,run))
-            dfs.append(self.return_pandas(curr_path))
+            df = self.return_pandas(curr_path)
+            if len(df)>0:
+                df.columns = [int(curr_path.stem)]
+            dfs.append(df)
         return pd.concat(dfs, axis=1)
 
     def return_pandas(self,path) -> pd.DataFrame:

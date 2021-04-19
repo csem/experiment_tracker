@@ -24,11 +24,12 @@ class FileLoader(base_loader.BaseLoader):
             print(f"WARNING: No files of type {self.query_string} in {path} found")
             return pd.DataFrame()
         else:
-            
-            df = pd.DataFrame({"path":npy_file_paths},index=range(len(npy_file_paths)))
+
+            index = pd.MultiIndex.from_tuples([("path", i) for i in range(len(npy_file_paths))])
+            df = pd.DataFrame({"path":npy_file_paths},index=index)
             df_res = self.create_metadata_df(path)
             df_res = df_res[np.repeat(df_res.columns.values, len(df.columns))]
-            df_res.columns = df.columns
-            df = pd.concat([df, df_res])
+            df.columns = df_res.columns
+            df = pd.concat([df_res,df])
         return df
 
