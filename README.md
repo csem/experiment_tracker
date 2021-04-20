@@ -42,5 +42,20 @@ Start by importing `csem_exptrack`
 - **Experiment**: A collection of one or more runs. Each experiment contains one or more runs subfolders 
 - **Run**: A training of a learning algorithm plus its performance evaluation 
 
+# Important
+
+If you want to use the parallel coordinate plots all yours hyperparameters should be indented and included in hyperparameters. Example:
+```
+hyperparameters:
+  lm_bs: 128 
+  lm_last_layer_epochs: 7
+  lm_all_layers_epochs: 6
+```
+
+Adding a key called random_seed will allow you to average plots.
+
+Metrics should be added to the resulting pandas dataframe creating new rows with levels ("metrics",NameOfYourMetric)
+
 # Structure of the resulting pandas dataframe 
-df_example contains an example of pandas dataframe  end result
+The base loader returns an hierchical pandas dataframe. This contains all parameters, plus paths to import files. The name of this pandas dataframe is param_df
+In addition to this, each plotting function requires another pandas dataframe, called df_parallel_coordinate
