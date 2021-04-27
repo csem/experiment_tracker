@@ -24,7 +24,11 @@ class BaseLoader():
             dfs.append(curr_df)
         
         df = pd.concat(dfs, axis=1)
-        df = df.drop_duplicates()
+        try:
+            df = df.drop_duplicates()
+        except TypeError:
+            df.loc[df.astype(str).drop_duplicates().index] # If there are lists in the df due to presence of lists in the hydra config
+
         return df
 
     def load_experiment(self, folder: Path, time: datetime):
