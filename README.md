@@ -35,7 +35,7 @@ CSEM_ExperimentTracker is module tha comprises of two main sub-modules (plus a b
 - Process. Here you will modules processing hydra like structure.  base_loader.py is the abstract class that needs to be implemented depeding for your specific type of experiment. You can find this already for lightning.
 
 Start by looking at loading_data.py in examples. This allows you to collect programmatically the path of any file that matches a string (query_string).
-
+The returned pandas dataframe contains all but rows from the Hydra file. The last row is the path of the desired file.
 # Terminology (Based on WandB):
 
 - **Project**: A collection of one or more experiments. (Each _Project_ has one or more days sub-folders, and then one or more time sub-folders) 
