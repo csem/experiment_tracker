@@ -34,8 +34,8 @@ CSEM_ExperimentTracker is module tha comprises of two main sub-modules (plus a b
 
 - Process. Here you will modules processing hydra like structure.  base_loader.py is the abstract class that needs to be implemented depeding for your specific type of experiment. You can find this already for lightning.
 
-Start by importing `csem_exptrack`
-
+Start by looking at loading_data.py in examples. This allows you to collect programmatically the path of any file that matches a string (query_string).
+The returned pandas dataframe contains all but rows from the Hydra file. The last row is the path of the desired file. You can access it with df.loc["path"]
 # Terminology (Based on WandB):
 
 - **Project**: A collection of one or more experiments. (Each _Project_ has one or more days sub-folders, and then one or more time sub-folders) 
@@ -59,3 +59,7 @@ Metrics should be added to the resulting pandas dataframe creating new rows with
 # Structure of the resulting pandas dataframe 
 The base loader returns an hierchical pandas dataframe. This contains all parameters, plus paths to import files. The name of this pandas dataframe is param_df
 In addition to this, each plotting function requires another pandas dataframe, called df_parallel_coordinate
+
+# To Do 
+1) Allow multiple query strings at the same time
+2) Add better documentation for plots
