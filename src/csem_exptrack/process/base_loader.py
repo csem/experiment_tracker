@@ -8,7 +8,6 @@ from datetime import datetime
 from . import utils
 import yaml
 
-
 class BaseLoader():
     def __init__(self):
         pass
@@ -131,16 +130,12 @@ class BaseLoader_fdi():
         dfs = []
         
         exp_dict_other = flatten(metadata, reducer='path')
-        exp_dict_hyper = {}
-        for hyperparm_key in self.hyperparameters_list:
-            if hyperparm_key in exp_dict_other.keys():
-                exp_dict_hyper[hyperparm_key] = exp_dict_other[hyperparm_key]
-                exp_dict_other.pop(hyperparm_key)
 
         df_other = pd.DataFrame.from_dict(exp_dict_other, orient="index")
         df_other.index = pd.MultiIndex.from_tuples([("other", x) for x in exp_dict_other])
         dfs.append(df_other)
 
+        exp_dict_hyper = {key: exp_dict_other[key] for key in self.hyperparameters_list}
         df_hyper = pd.DataFrame.from_dict(exp_dict_hyper, orient="index")
         df_hyper.index = pd.MultiIndex.from_tuples([("hyperparameters", x) for x in exp_dict_hyper])
         dfs.append(df_hyper)
