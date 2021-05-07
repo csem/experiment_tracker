@@ -109,7 +109,6 @@ Current supported plots:
 ```python
 plots.parallel_coordinates(param_df: pd.DataFrame, perf_df: pd.DataFrame) --> None 
 ```
-
 param_df: pd.DataFrame mentioned above (i.e. the one you load with process.file_loader).  It must contain a level 0 named "hyperparameters".
 perf_df: pd.DataFrmae pandas dataframe with columns the metrics you are interested and with two-level rows with date and runs. The runs must exists in param_df, and can be also a subset. 
 
@@ -140,6 +139,8 @@ These are also valid:
 ```python
 plots.interactive_confusion_matrix(conf: np.array, order: List, colorscale="electric"): --> None
 ```
+conf: 2D np.array containing the data. 
+order: list containing the correct order for labels
 
 ### Learning Curves
 
