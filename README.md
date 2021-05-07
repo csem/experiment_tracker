@@ -105,6 +105,11 @@ Current supported plots:
 * Confusion Matrix
 * Learning Curves
 
+you can use them by importing 
+```python
+from csem_exptrack.gui import plots
+```
+
 ### Parallel Coordinates
 ```python
 plots.parallel_coordinates(param_df: pd.DataFrame, perf_df: pd.DataFrame) --> None 
