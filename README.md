@@ -75,7 +75,7 @@ The pd.DataFrame has hierchical structure, both for columns and rows.
   - Level 0: **Date**: The date of your experiment (i.e. 2021-01-26 17-07-39)
   - Level 1: **Run**: The integer representing the value of your run (0 to 3)
 - Rows:
-  - Level 0: **Group**: Can be Hyperparameters, Dataset, Other, Path. See below "formatting the hydra file"
+  - Level 0: **param_df**: Can be Hyperparameters, Dataset, Other, Path. See below "formatting the hydra file"
   - Level 1: **Parameters**: Parameters for each subgroup
 
 You can know more about hierchical pandas dataframe here: 
@@ -108,6 +108,32 @@ Current supported plots:
 * Learning Curves
 
 ### Parallel Coordinates
+plots.parallel_coordinates(param_df, perf_df) --> None 
+param_df: pd.DataFrame mentioned above (must contain a level0 named hyperparameters)
+perf_df: must be a pandas dataframe with columns the metrics you are interested and with two-level rows with date and runs. The runs must exists in param_df, and can be also a subset. 
+
+Example of perf_df with one single columns:
+```python
+                       best_accuracy
+2021-01-26 17-07-39 0       0.702448
+                    1       0.4345
+                    2       0.681733
+```
+
+These are also valid:
+- Subset of runs
+```python
+                       best_accuracy
+2021-01-26 17-07-39 0       0.702448
+                    2       0.681733
+```
+- Multiple metrics 
+```python
+                       best_accuracy  Reward
+2021-01-26 17-07-39 0       0.702448       3
+                    2       0.681733       9
+```
+
 
 ### Confusion Matrix 
 
