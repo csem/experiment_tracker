@@ -76,7 +76,7 @@ The pd.DataFrame has hierchical structure, both for columns and rows.
   - Level 1: **Run**: the name of the parameter you used in your .hydra/config file
 - Rows:
   - Level 0: **Group**: See below "formatting the hydra file"
-  - Level 1: **parameters**: See below "formatting the hydra file"
+  - Level 1: **Parameters**: See below "formatting the hydra file"
 
 
 
