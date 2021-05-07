@@ -98,8 +98,14 @@ df.loc[:, ('2021-01-26 17-07-39', 1)]
 ```
 
 ## Visualize your results
-This module offers a series of utility functions and templates for creating your own GUI and visualize your results.
-You should be some what familiar with Streamlit. If you aren't, just spend 20 minutes looking at https://docs.streamlit.io/en/stable/getting_started.html
+Before starting you should be some what familiar with Streamlit. If you aren't, just spend 20 minutes looking at https://docs.streamlit.io/en/stable/getting_started.html.
+This library offers some utility functions for creating CSEM GUI and visualize your results nicely.
+Each plotting function requires two parameters: the pd.DataFrame mentioned above and a data argument, specific for the plot.
+The keyword list contains the following arguments:
+Current supported plots:
+* Learning Curves
+* Parallel Coordinates 
+* Confusion Matrix
 
 
 # Terminology (Based on WandB):
