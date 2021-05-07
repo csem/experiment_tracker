@@ -23,9 +23,7 @@ Then install the repo as:
 
 # Getting started
 ## Collect your results
-# Getting started
-## Collect your results
-Let's assume you have run an experiment "my_experiment" of 4 runs (see below for the terminology) on 2021-01-26 at 17:07:39. And that, for each run you are saving a npy file and a log file. 
+Let's assume you have run an experiment "my_experiment" of 3 runs (see below for the terminology) on 2021-01-26 at 17:07:39. And that, for each run you are saving a npy file and a log file. 
 
 ```
 my_experiment/
@@ -52,17 +50,10 @@ my_experiment/
         │   │   └── overrides.yaml
         │   ├── lstm_finetuning.log
         │   └── metric.npy
-        ├── 3
-        │   ├── .hydra
-        │   │   ├── config.yaml
-        │   │   ├── hydra.yaml
-        │   │   └── overrides.yaml
-        │   ├── lstm_finetuning.log
-        │   └── metric.npy
         └── multirun.yaml
 ```
 
-The following code snippets will return an hierchical pandas dataframe containing the parameters for each and the path to your results (i.e. the npy files).
+The following code snippets will return a pd.DataFrame containing the parameters for each and the path to your results (i.e. the npy files).
 
 ```python
 from csem_exptrack import process
@@ -70,13 +61,22 @@ loader = process.file_loader.FileLoader(query_string="*.npy")
 df = loader.load_folder("my_experiment")
 ```
 
-if you want return also the path to your log files you pass a list instead of a string as parameter to query_string 
+if you want to return also the path to your log files you can pass a list instead of a string as parameter to query_string 
 
 ```python
 from csem_exptrack import process
 loader = process.file_loader.FileLoader(query_string=["*.npy","*.log"])
 df = loader.load_folder("my_experiment")
 ```
+
+The returned pd.DataFrame contains the paths of your results relative to the folder where you run your code the parameters, from .hydra/config, of each run.
+The pd.DataFrame has hierchical structure, both for columns and rows.
+Columns:
+Level 0: **Date**: the path to the results (npy file)
+Level 1: **Run**: the name of the parameter you used in your .hydra/config file
+Rows:
+Level 0: **Group**: See below "formatting the hydra file"
+Level 1: **parameters**: See below "formatting the hydra file"
 
 
 
@@ -98,8 +98,6 @@ The returned pandas dataframe contains all but rows from the Hydra file. The las
 - **Run**: A training of a learning algorithm plus its performance evaluation 
 
 # Important
-
-
 If you want to use the parallel coordinate plots all yours hyperparameters should be indented and included in hyperparameters. Example:
 ```
 hyperparameters:
