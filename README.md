@@ -75,19 +75,32 @@ The pd.DataFrame has hierchical structure, both for columns and rows.
   - Level 0: **Date**: The date of your experiment (i.e. 2021-01-26 17-07-39)
   - Level 1: **Run**: The integer representing the value of your run (0 to 3)
 - Rows:
-  - Level 0: **Group**: See below "formatting the hydra file"
-  - Level 1: **Parameters**: See below "formatting the hydra file"
+  - Level 0: **Group**: Can be Hyperparameters, Dataset, Other, Path. See below "formatting the hydra file"
+  - Level 1: **Parameters**: Parameters for each subgroup
 
+You can know more about hierchical pandas dataframe here: 
+https://pandas.pydata.org/pandas-docs/stable/user_guide/advanced.html
 
+Once you have the pandas dataframe you can do whataver you want with it! Here some examples:
+1. Going through each run and load the npy file in a list, with the same order as the pd.DataFrame.
+```python
+results = [np.load(x,allow_pickle=True) for x in  df.loc[("path",0)]]
+```
 
+2. Get all the hyperparameters:
+```python
+df.loc["hyperparameters"]
+```
 
-This module offers a series of utility functions and templates for creating your own GUI.
+3. Get all parameters for run 1
+```python
+df.loc[:, ('2021-01-26 17-07-39', 1)]
+```
+
+## Visualize your results
+This module offers a series of utility functions and templates for creating your own GUI and visualize your results.
 You should be some what familiar with Streamlit. If you aren't, just spend 20 minutes looking at https://docs.streamlit.io/en/stable/getting_started.html
 
-CSEM_ExperimentTracker is module tha comprises of two main sub-modules (plus a bunch of utilities .py files)
-- GUI. Here will find modules about implementing graphical widget, plots and GUI utilities.
-
-- Process. Here you will modules processing hydra like structure.  base_loader.py is the abstract class that needs to be implemented depeding for your specific type of experiment. You can find this already for lightning.
 
 Start by looking at loading_data.py in examples. This allows you to collect programmatically the path of any file that matches a string (query_string).
 The returned pandas dataframe contains all but rows from the Hydra file. The last row is the path of the desired file. You can access it with df.loc["path"]
@@ -97,18 +110,17 @@ The returned pandas dataframe contains all but rows from the Hydra file. The las
 - **Experiment**: A collection of one or more runs. Each experiment contains one or more runs subfolders 
 - **Run**: A training of a learning algorithm plus its performance evaluation 
 
-# Important
-If you want to use the parallel coordinate plots all yours hyperparameters should be indented and included in hyperparameters. Example:
+# Formatting the hydra file
+All parameters beloging to an indentation group called "hyperparameters", for instance:
 ```
 hyperparameters:
   lm_bs: 128 
   lm_last_layer_epochs: 7
   lm_all_layers_epochs: 6
 ```
-
-Adding a key called random_seed will allow you to average plots.
-
-Metrics should be added to the resulting pandas dataframe creating new rows with levels ("metrics",NameOfYourMetric)
+will appear together in the resulting pd.DataFrame. Same for the "dataset" group.
+All the other parameters will be categorized in the "other" group.
+Parallel coordinate plots will only look at the hyperparameters group. 
 
 # Structure of the resulting pandas dataframe 
 The base loader returns an hierchical pandas dataframe. This contains all parameters, plus paths to import files. The name of this pandas dataframe is param_df
