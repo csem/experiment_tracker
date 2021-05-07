@@ -100,8 +100,6 @@ df.loc[:, ('2021-01-26 17-07-39', 1)]
 ## Visualize your results
 Before starting you should be some what familiar with Streamlit. If you aren't, just spend 20 minutes looking at https://docs.streamlit.io/en/stable/getting_started.html.
 This library offers some utility functions for creating CSEM GUI and visualize your results nicely.
-Each plotting function requires two parameters: the pd.DataFrame mentioned above and a data argument, specific for the plot.
-The keyword list contains the following arguments:
 Current supported plots:
 * Parallel Coordinates 
 * Confusion Matrix
@@ -110,8 +108,8 @@ Current supported plots:
 ### Parallel Coordinates
 plots.parallel_coordinates(param_df, perf_df) --> None 
 
-param_df: pd.DataFrame mentioned above (must contain a level0 named hyperparameters)
-perf_df: must be a pandas dataframe with columns the metrics you are interested and with two-level rows with date and runs. The runs must exists in param_df, and can be also a subset. 
+param_df: pd.DataFrame mentioned above (i.e. the one you load with process.file_loader).  It must contain a level 0 named "hyperparameters".
+perf_df: pd.DataFrmae pandas dataframe with columns the metrics you are interested and with two-level rows with date and runs. The runs must exists in param_df, and can be also a subset. 
 
 Example of perf_df with one single columns:
 ```python
