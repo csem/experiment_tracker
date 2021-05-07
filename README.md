@@ -108,7 +108,7 @@ Current supported plots:
 * Learning Curves
 
 ### Parallel Coordinates
-plots.parallel_coordinates(param_df, perf_df) --> None 
+plots.parallel_coordinates(param_df, perf_df) --> None \n
 param_df: pd.DataFrame mentioned above (must contain a level0 named hyperparameters)
 perf_df: must be a pandas dataframe with columns the metrics you are interested and with two-level rows with date and runs. The runs must exists in param_df, and can be also a subset. 
 
