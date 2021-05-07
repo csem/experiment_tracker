@@ -21,8 +21,66 @@ When cloning the repo with a submodule remember to add `--recurse-submodules --r
 Then install the repo as:
 `pip install -e csem_experimenttracker/`
 
+# Getting started
+## Collect your results
+# Getting started
+## Collect your results
+Let's assume you have run an experiment "my_experiment" of 4 runs (see below for the terminology) on 2021-01-26 at 17:07:39. And that, for each run you are saving a npy file and a log file. 
 
-# How to use it
+```
+my_experiment/
+└── 2021-01-26
+    └── 17-07-39
+        ├── 0
+        │   ├── .hydra
+        │   │   ├── config.yaml
+        │   │   ├── hydra.yaml
+        │   │   └── overrides.yaml
+        │   ├── lstm_finetuning.log
+        │   └── metric.npy
+        ├── 1
+        │   ├── .hydra
+        │   │   ├── config.yaml
+        │   │   ├── hydra.yaml
+        │   │   └── overrides.yaml
+        │   ├── lstm_finetuning.log
+        │   └── metric.npy
+        ├── 2
+        │   ├── .hydra
+        │   │   ├── config.yaml
+        │   │   ├── hydra.yaml
+        │   │   └── overrides.yaml
+        │   ├── lstm_finetuning.log
+        │   └── metric.npy
+        ├── 3
+        │   ├── .hydra
+        │   │   ├── config.yaml
+        │   │   ├── hydra.yaml
+        │   │   └── overrides.yaml
+        │   ├── lstm_finetuning.log
+        │   └── metric.npy
+        └── multirun.yaml
+```
+
+The following code snippets will return an hierchical pandas dataframe containing the parameters for each and the path to your results (i.e. the npy files).
+
+```python
+from csem_exptrack import process
+loader = process.file_loader.FileLoader(query_string="*.npy")
+df = loader.load_folder("my_experiment")
+```
+
+if you want return also the path to your log files you pass a list instead of a string as parameter to query_string 
+
+```python
+from csem_exptrack import process
+loader = process.file_loader.FileLoader(query_string=["*.npy","*.log"])
+df = loader.load_folder("my_experiment")
+```
+
+
+
+
 This module offers a series of utility functions and templates for creating your own GUI.
 You should be some what familiar with Streamlit. If you aren't, just spend 20 minutes looking at https://docs.streamlit.io/en/stable/getting_started.html
 
@@ -40,6 +98,7 @@ The returned pandas dataframe contains all but rows from the Hydra file. The las
 - **Run**: A training of a learning algorithm plus its performance evaluation 
 
 # Important
+
 
 If you want to use the parallel coordinate plots all yours hyperparameters should be indented and included in hyperparameters. Example:
 ```
