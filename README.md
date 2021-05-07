@@ -103,9 +103,15 @@ This library offers some utility functions for creating CSEM GUI and visualize y
 Each plotting function requires two parameters: the pd.DataFrame mentioned above and a data argument, specific for the plot.
 The keyword list contains the following arguments:
 Current supported plots:
-* Learning Curves
 * Parallel Coordinates 
 * Confusion Matrix
+* Learning Curves
+
+### Parallel Coordinates
+
+### Confusion Matrix 
+
+### Learning Curves
 
 
 # Terminology (Based on WandB):
