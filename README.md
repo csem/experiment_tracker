@@ -106,7 +106,9 @@ Current supported plots:
 * Learning Curves
 
 ### Parallel Coordinates
-plots.parallel_coordinates(param_df, perf_df) --> None 
+```python
+plots.parallel_coordinates(param_df: pd.DataFrame, perf_df: pd.DataFrame) --> None 
+```
 
 param_df: pd.DataFrame mentioned above (i.e. the one you load with process.file_loader).  It must contain a level 0 named "hyperparameters".
 perf_df: pd.DataFrmae pandas dataframe with columns the metrics you are interested and with two-level rows with date and runs. The runs must exists in param_df, and can be also a subset. 
@@ -135,6 +137,9 @@ These are also valid:
 
 
 ### Confusion Matrix 
+```python
+plots.interactive_confusion_matrix(conf: np.array, order: List, colorscale="electric"): --> None
+```
 
 ### Learning Curves
 
@@ -158,5 +163,4 @@ All the other parameters will be categorized in the "other" group.
 Parallel coordinate plots will only look at the hyperparameters group. 
 
 # To Do 
-1) Allow multiple query strings at the same time
-2) Add better documentation for plots
+1) Add documentation for learning curves
