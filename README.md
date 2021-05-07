@@ -102,8 +102,6 @@ This module offers a series of utility functions and templates for creating your
 You should be some what familiar with Streamlit. If you aren't, just spend 20 minutes looking at https://docs.streamlit.io/en/stable/getting_started.html
 
 
-Start by looking at loading_data.py in examples. This allows you to collect programmatically the path of any file that matches a string (query_string).
-The returned pandas dataframe contains all but rows from the Hydra file. The last row is the path of the desired file. You can access it with df.loc["path"]
 # Terminology (Based on WandB):
 
 - **Project**: A collection of one or more experiments. (Each _Project_ has one or more days sub-folders, and then one or more time sub-folders) 
@@ -121,10 +119,6 @@ hyperparameters:
 will appear together in the resulting pd.DataFrame. Same for the "dataset" group.
 All the other parameters will be categorized in the "other" group.
 Parallel coordinate plots will only look at the hyperparameters group. 
-
-# Structure of the resulting pandas dataframe 
-The base loader returns an hierchical pandas dataframe. This contains all parameters, plus paths to import files. The name of this pandas dataframe is param_df
-In addition to this, each plotting function requires another pandas dataframe, called df_parallel_coordinate
 
 # To Do 
 1) Allow multiple query strings at the same time
