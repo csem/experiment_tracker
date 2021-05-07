@@ -72,8 +72,8 @@ df = loader.load_folder("my_experiment")
 The returned pd.DataFrame contains the paths of your results relative to the folder where you run your code the parameters, from .hydra/config, of each run.
 The pd.DataFrame has hierchical structure, both for columns and rows.
 - Columns:
-  - Level 0: **Date**: the path to the results (npy file)
-  - Level 1: **Run**: the name of the parameter you used in your .hydra/config file
+  - Level 0: **Date**: The date of your experiment (i.e. 2021-01-26 17-07-39)
+  - Level 1: **Run**: The integer representing the value of your run (0 to 3)
 - Rows:
   - Level 0: **Group**: See below "formatting the hydra file"
   - Level 1: **Parameters**: See below "formatting the hydra file"
