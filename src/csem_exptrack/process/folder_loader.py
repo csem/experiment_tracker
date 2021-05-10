@@ -28,3 +28,24 @@ class FolderLoader(base_loader.BaseLoader):
 
         return df
 
+
+class FolderLoader_fdi(base_loader.BaseLoader_fdi):
+    """This class allows to collect any file with the name speficified during the class instantiation"""
+    """It returns the path in the pandas dataframe"""
+
+    def __init__(self, hyperparameters_list):
+        super().__init__(hyperparameters_list)
+
+    def return_pandas(self,path:Path) -> pd.DataFrame:
+        #files = os.listdir(path)
+        folder_path = os.path.join(path)
+
+        index = pd.MultiIndex.from_tuples([("folder", "")])
+        df = pd.DataFrame({"folder":folder_path},index=index)
+        df_res = self.create_metadata_df(path)
+        df_res = df_res[np.repeat(df_res.columns.values, len(df.columns))]
+        df.columns = df_res.columns
+        df = pd.concat([df_res,df])
+
+        return df
+
