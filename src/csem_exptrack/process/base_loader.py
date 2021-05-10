@@ -29,7 +29,7 @@ class BaseLoader():
         except TypeError:
             df.loc[df.astype(str).drop_duplicates().index] # If there are lists in the df due to presence of lists in the hydra config
 
-        return df
+        return df.sort_index(axis=1)
 
     def load_experiment(self, folder: Path, time: datetime):
         dfs = []

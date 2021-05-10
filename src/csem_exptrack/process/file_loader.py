@@ -15,11 +15,18 @@ class FileLoader(base_loader.BaseLoader):
     """This class allows to collect any file with the name speficified during the class instantiation"""
     """It returns the path in the pandas dataframe"""
     def __init__(self,query_string):
-        self.query_string = query_string
+        if type(query_string) == str:
+            self.query_string = [query_string]
+        elif type(query_string) == list:
+            self.query_string = query_string
+        else:
+            raise TypeError
 
     def return_pandas(self,path:Path) -> pd.DataFrame:
         #files = os.listdir(path)
-        npy_file_paths = glob.glob(os.path.join(path,self.query_string))
+        npy_file_paths = []
+        for query_string in self.query_string:
+            npy_file_paths.extend(glob.glob(os.path.join(path,query_string)))
         if not npy_file_paths:
             print(f"WARNING: No files of type {self.query_string} in {path} found")
             return pd.DataFrame()

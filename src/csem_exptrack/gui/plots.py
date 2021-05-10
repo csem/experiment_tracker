@@ -79,7 +79,8 @@ def interactive_confusion_matrix(conf, order, colorscale="electric"):
     )
     return fig1
 
-def parallel_coordinates(param_df:pd.DataFrame,perf_df:pd.DataFrame):    
+def parallel_coordinates(param_df:pd.DataFrame,perf_df:pd.DataFrame):  
+    param_df = param_df.loc[:, perf_df.index]
     entries = _create_parallel_coordiante_dict(param_df,perf_df)
     fig = go.Figure(data=
         go.Parcoords(
