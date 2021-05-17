@@ -148,9 +148,7 @@ These are also valid:
 plots.interactive_confusion_matrix(conf: np.array, order: List, colorscale="electric"): --> None
 ```
 
-conf: 2D np.array containing the data. Each row must contains a same class prediction.
-order: list containing the labels
-
+conf: 2D np.array containing the values of the confusion matrix. Each row must contains a same class prediction.
 Example of conf:
 ```python
 array([[343,   6,  23,  39],
@@ -158,6 +156,9 @@ array([[343,   6,  23,  39],
        [ 39,   2, 161,  10],
        [ 59,   2,  25, 108]])
 ```
+
+order: list containing the labels
+
 343 is the prediction of class 1 given the ground truth is class 1. 6 is the prediction of class 1 given that the ground truth is class 2.
 
 ### Learning Curves
