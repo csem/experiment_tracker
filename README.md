@@ -20,8 +20,8 @@ Changes to be committed:
 #### Cloning from a remote repo containing it
 When cloning the repo with a submodule remember to add `--recurse-submodules --remote-submodules` to the git clone command. Otherwise submodules will not be used.
 
-
-Then install the repo as:
+#### Pip Installation
+After you have cloned CSEM_ExperimentTracker,  install it with:
 `pip install -e csem_experimenttracker/`
 
 # Getting started
