@@ -5,7 +5,7 @@ Here a working example http://138.131.217.125:8501/
 
 # Installation 
 
-### Adding to an existing repo
+#### Adding to an existing repo
 For adding CSEM_ExperimentTracker as a submodules in a repo for the first time just run:
 `git submodule add git@gitlab.csem.local:611/csem_experimenttracker.git`
 Then add and commit the two files 
@@ -17,12 +17,12 @@ Changes to be committed:
         new file:   csem_experimenttracker
 ```
 
-### Cloning from a remote repo containing it
+#### Cloning from a remote repo containing it
 When cloning the repo with a submodule remember to add `--recurse-submodules --remote-submodules` to the git clone command. Otherwise submodules will not be used.
 
 
 Then install the repo as:
-`pip install -e CSEM_ExperimentTracker/`
+`pip install -e csem_experimenttracker/`
 
 # Getting started
 ## Collect your results
