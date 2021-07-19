@@ -4,6 +4,8 @@ You can also export and visualize them by different ways using streamlit and plo
 Here a working example http://138.131.217.125:8501/
 
 # Installation 
+
+#### Adding to an existing repo
 For adding CSEM_ExperimentTracker as a submodules in a repo for the first time just run:
 `git submodule add git@gitlab.csem.local:611/csem_experimenttracker.git`
 Then add and commit the two files 
@@ -15,10 +17,11 @@ Changes to be committed:
         new file:   csem_experimenttracker
 ```
 
+#### Cloning from a remote repo containing it
 When cloning the repo with a submodule remember to add `--recurse-submodules --remote-submodules` to the git clone command. Otherwise submodules will not be used.
 
-
-Then install the repo as:
+#### Pip Installation
+After you have cloned CSEM_ExperimentTracker,  install it with:
 `pip install -e csem_experimenttracker/`
 
 # Getting started
@@ -145,9 +148,7 @@ These are also valid:
 plots.interactive_confusion_matrix(conf: np.array, order: List, colorscale="electric"): --> None
 ```
 
-conf: 2D np.array containing the data. Each row must contains a same class prediction.
-order: list containing the labels
-
+conf: 2D np.array containing the values of the confusion matrix. Each row must contains a same class prediction.
 Example of conf:
 ```python
 array([[343,   6,  23,  39],
@@ -155,6 +156,9 @@ array([[343,   6,  23,  39],
        [ 39,   2, 161,  10],
        [ 59,   2,  25, 108]])
 ```
+
+order: list containing the labels
+
 343 is the prediction of class 1 given the ground truth is class 1. 6 is the prediction of class 1 given that the ground truth is class 2.
 
 ### Learning Curves
