@@ -145,7 +145,7 @@ These are also valid:
 
 ### Confusion Matrix 
 ```python
-plots.interactive_confusion_matrix(conf: np.array, order: List, colorscale="electric"): --> None
+plots.interactive_confusion_matrix(conf: np.array, order: List, colorscale="electric"): --> fig
 ```
 This function will display a interactive (i.e. you can hoover over cells for more details) confusion matrix.
 
@@ -163,7 +163,8 @@ conf = np.array([[343,   9,  23,  39],
        [ 59,   2,  25, 108]])
 order = ["First Class", "Second Class", "Third Class", "Fourth Class"]
 colorscale = "electric"
-plots.interactive_confusion_matrix(conf, order, colorscale="electric")
+fig = plots.interactive_confusion_matrix(conf, order, colorscale="electric")
+fig.show()
 ```
 343 is the prediction of class 1 given the ground truth is class 1. 6 is the prediction of class 1 given that the ground truth is class 2.
 
