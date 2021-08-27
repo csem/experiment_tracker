@@ -40,9 +40,9 @@ def plots_epochs(
 
 
 
-def interactive_confusion_matrix(conf, order, colorscale="electric"):
-    x = order
-    y = order
+def interactive_confusion_matrix(conf, classes, colorscale="electric"):
+    x = classes
+    y = classes
     z_text_train = [[str(y) for y in x] for x in conf.T]
     z_text_test = [[str(y) for y in x] for x in conf.T]
     hover1 = []
