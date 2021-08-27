@@ -147,7 +147,8 @@ These are also valid:
 ```python
 plots.interactive_confusion_matrix(conf: np.array, order: List, colorscale="electric"): --> None
 ```
-This function will display a interactive (i.e. you can hoover over cells for more details) confusion matrix. \n
+This function will display a interactive (i.e. you can hoover over cells for more details) confusion matrix.
+
 Arguments:
 * conf: 2D np.array representing the confusion matrix. Element on the same row belong to the same class, Element on the same column are predicted to belong to the same class.
 Example of conf:
