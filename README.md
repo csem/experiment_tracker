@@ -151,16 +151,23 @@ This function will display a interactive (i.e. you can hoover over cells for mor
 
 Arguments:
 * conf: 2D np.array representing the confusion matrix. Element on the same row belong to the same class, Element on the same column are predicted to belong to the same class.
-Example of conf:
+* order: list containing the labels
+* colorscale: color style for the plotl
+
+
+Usage example:
 ```python
-array([[343,   9,  23,  39],
+conf = np.array([[343,   9,  23,  39],
        [  6, 200,   0,   2],
        [ 39,   2, 161,  10],
        [ 59,   2,  25, 108]])
+order = ["First Class", "Second Class", "Third Class", "Fourth Class"]
+colorscale = "electric"
+plots.interactive_confusion_matrix(conf, order, colorscale="electric")
 ```
 343 is the prediction of class 1 given the ground truth is class 1. 6 is the prediction of class 1 given that the ground truth is class 2.
 
-* order: list containing the labels
+
 
 
 ### Learning Curves
