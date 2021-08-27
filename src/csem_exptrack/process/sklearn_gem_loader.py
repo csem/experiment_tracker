@@ -28,9 +28,8 @@ class SklearnGemLoader(base_loader.BaseLoader):
         df_res = df_res[np.repeat(df_res.columns.values, len(df_metrics.columns))]
         df_res.columns = df_metrics.columns
         df = pd.concat([df_metrics, df_res])
-        exp_name = df.loc[("other","exp_name")].iloc[0]
         run = int(path.stem)
         exp_time = datetime.strptime(path.parent.parent.stem + " " + path.parent.stem, "%Y-%m-%d %H-%M-%S")
-        df.columns = pd.MultiIndex.from_tuples(((exp_name,exp_time,run),), names=("Name", "Time","Run"))
+        df.columns = pd.MultiIndex.from_tuples((("Experiment",exp_time,run),), names=("Name", "Time","Run"))
         return df
 
