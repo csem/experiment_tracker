@@ -110,3 +110,56 @@ def normalize_confusion_matrix(cm, mode="recall"):
     else:
         cm = np.round(cm.astype("float") / cm.sum(axis=0)[np.newaxis, :], 2)
     return cm
+
+
+def edit_entry(df, previous_entry, new_entry):
+    """
+    This returns a dataframe identical to the input one, but with the entry specified in previous_entry replaced by new_entry
+    args:
+        df: dataframe
+        previous_entry: str/tuple/int
+        new_entry: str/tuple/int
+
+    Example: 
+        return_df = edit_entry(df, ("other", 2), ("hyper", 2))
+        with df:
+                          metric_1  metric_2  metric_3  ... 
+            other 0       0.702448       3
+                  2       0.681733       9
+
+        with return_df:
+                          metric_1  metric_2  metric_3  ... 
+            hyper 0       0.702448       3
+            other 2       0.681733       9    
+    """
+
+    df = df.copy()
+    df.loc[new_entry,:] = df.loc[previous_entry]
+    
+    # remove the previous entry
+    df = df.drop(previous_entry)
+
+    return df
+
+def check_param_df_format():
+    raise NotImplementedError
+
+def create_perf_df(param_df, performance_metrics):
+    """
+    Utility function to create a performance dataframe (aka perf_df) conventiently.
+    args:
+        param_df: a dataframe with param_df format (see check_param_df_format)
+        performance_metrics: a dictionary of list of performance metrics. The list order must be the same as the columns in the param_df
+    returns:
+        perf_df: a dataframe with the following format:
+                                        metric_1  metric_2  metric_3  ... 
+            2021-01-26 17-07-39 0       0.702448       3
+                                2       0.681733       9
+
+    """
+    perf_df = pd.DataFrame(columns=performance_metrics.keys(), index=param_df.columns)
+    for k, v in performance_metrics.items():
+        perf_df[k] = v
+        
+    return perf_df
+

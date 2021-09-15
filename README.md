@@ -61,7 +61,7 @@ The following code snippets will return a pd.DataFrame containing the parameters
 ```python
 from csem_exptrack import process
 loader = process.file_loader.FileLoader(query_string="*.npy")
-df = loader.load_folder("my_experiment")
+df = loader.load_project("my_experiment")
 ```
 
 if you want to return also the path to your log files you can pass a list instead of a string as parameter to query_string 
@@ -69,7 +69,7 @@ if you want to return also the path to your log files you can pass a list instea
 ```python
 from csem_exptrack import process
 loader = process.file_loader.FileLoader(query_string=["*.npy","*.log"])
-df = loader.load_folder("my_experiment")
+df = loader.load_project("my_experiment")
 ```
 
 The returned pd.DataFrame contains the paths of your results relative to the folder where you run your code the parameters, from .hydra/config, of each run.

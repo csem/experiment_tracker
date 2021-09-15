@@ -12,12 +12,15 @@ class BaseLoader():
     def __init__(self):
         pass
 
-    def load_folder(self, folder: Path):
+    def load_project(self, base_project_path: Path):
+        """
+        base_project_path: folder containing multiple experiments (e.g. a folder with inside multiples year-month-day/hour-min-sec folders)
+        """
         dfs = []
-        for dates, h_m_s in utils.traverse_folders(folder):
+        for dates, h_m_s in utils.traverse_folders(base_project_path):
             str_time = dates + " " + h_m_s
             exp_time = datetime.strptime(str_time, "%Y-%m-%d %H-%M-%S")
-            curr_df = self.load_experiment(folder, exp_time)
+            curr_df = self.load_experiment(base_project_path, exp_time)
             t = pd.MultiIndex.from_tuples([(str_time,x) for x in curr_df.columns])
             curr_df.columns = t
             dfs.append(curr_df)
@@ -31,6 +34,7 @@ class BaseLoader():
         return df.sort_index(axis=1)
 
     def load_experiment(self, folder: Path, time: datetime):
+        
         dfs = []
         date = time.strftime("%Y-%m-%d")
         h_m_s = time.strftime("%H-%M-%S")

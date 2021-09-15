@@ -40,11 +40,23 @@ def plots_epochs(
 
 
 
-def interactive_confusion_matrix(conf, classes, colorscale="electric"):
+def interactive_confusion_matrix(conf, classes, colorscale="electric", width=600, height=500, ispercent = False):
+    """
+    args:
+        conf: confusion matrix
+        classes: list of classes
+        colorscale: colorscale
+        width: width of plot
+        height: height of plot
+        ispercent: if true, plot is in percentage
+    """
     x = classes
     y = classes
-    z_text_train = [[str(y) for y in x] for x in conf.T]
-    z_text_test = [[str(y) for y in x] for x in conf.T]
+    if ispercent:
+        z_text_train = [[str(np.round(y,2)*100) + "%" for y in x] for x in conf.T]
+    else:
+        z_text_train = [[str(y) for y in x] for x in conf.T]
+
     hover1 = []
     for z in range(len(z_text_train)):
         hover1.append(
@@ -57,7 +69,7 @@ def interactive_confusion_matrix(conf, classes, colorscale="electric"):
                 + "<br>"
                 + "Instances:"
                 + str(
-                    conf[i, z]
+                    z_text_train[z][i]
                 )  # + "Variance " +  str(confusion_matrix_variance[i,z])
                 for i, _ in enumerate(z_text_train[z])
             ]
@@ -67,6 +79,7 @@ def interactive_confusion_matrix(conf, classes, colorscale="electric"):
         z=conf.T,
         x=x,
         y=y,
+        annotation_text=z_text_train, #list(zip(*z_text_train)),
         text=hover1,
         hoverinfo="text",
         colorscale=colorscale,
@@ -75,7 +88,7 @@ def interactive_confusion_matrix(conf, classes, colorscale="electric"):
     )
     fig1.update_yaxes(autorange="reversed")
     fig1.update_layout(
-        width=600, height=500, autosize=False, margin=dict(t=0, b=0, l=0, r=0)
+        width=width, height=height, autosize=False, margin=dict(t=0, b=0, l=0, r=0)
     )
     return fig1
 
