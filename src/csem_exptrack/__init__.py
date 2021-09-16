@@ -1,6 +1,6 @@
 from . import gui
 from . import process
-from . import utils 
+from . import pandas_utils 
 from . import loggers
 from .gui.gui_utils import header
 from .process.file_loader import FileLoader

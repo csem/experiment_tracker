@@ -2,7 +2,7 @@ import pandas as pd
 import pdb
 from collections import OrderedDict
 import numpy as np
-
+from typing import List, Dict, Tuple, Any
 
 def topk(series, k=5, min=True):
     target = series.sort_values(ascending=min).index.droplevel(-1)
@@ -91,6 +91,63 @@ def groupby_random_seed(df, keys_metrics):
             available_lines.add(str(dict(values.iloc[0])))
         groups[k] = (group)
     return groups, available_lines
+
+def find_identical_runs(param_df, attributes: List[Tuple]):
+    """
+    Returns a list of list of runs that have the same value at the given attributes
+    args:
+        param_df: a dataframe with param_df format (see check_param_df_format)
+        attributes: a list of tuples that are in the param_df
+    returns: 
+        resuls: a list with each element being a list of runs that have the same value for the given attributes
+    """
+    # First check that all attributes are present in the param_df
+    for attr in attributes:
+        assert attr in param_df.index, (f"Attribute {attr} not present in the param_df")
+    
+    # Then we use groupby to find the runs that have the same value for the attributes
+    # We use a set to avoid duplicates
+
+    param_df_T = param_df.T # Transposed needed for groupby
+    result = list()
+    for values, df in param_df_T.groupby(by=attributes,axis=0):
+        result.append(df.index)
+    return result
+
+def get_first_entry_for_each_run(param_df, runs):
+    """
+    Given a param_df and runs returns a pandas dataframe with all the first entry with each run
+    """
+    first_runs = [x[0] for x in runs]
+    return param_df.loc[:,first_runs]
+
+
+
+
+def return_mean_and_std_of_runs(perf_df, runs):
+    """
+    Return a dataframe with the mean and std of the runs
+    args:
+        perf_df: a dataframe with the performance of the runs
+        runs: a list of runs that are in the performance dataframe
+    returns: 
+        res: a perf_df dataframe-like with the mean and std of the runs (the index are the first entry of the runs)
+    """
+    res = pd.DataFrame()
+    index = [x[0] for x in runs]
+    for run in runs:
+        mean_df = perf_df.loc[run].mean()
+        mean_df.index = [x + "_mean" for x in mean_df.index]
+
+        std_df = perf_df.loc[run].std()
+        std_df.index = [x + "_std" for x in std_df.index]
+        res[run[0]] = pd.concat([mean_df, std_df])
+    
+    perf_df_res = res.T # Be compliant with perf_df format
+    perf_df_res.index = pd.MultiIndex.from_tuples(index)
+    return perf_df_res
+
+
 
 def drop_not_changing_row(df):
     return df.loc[~df.apply(is_unique,axis=1)]

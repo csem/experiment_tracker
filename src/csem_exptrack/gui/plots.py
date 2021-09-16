@@ -1,7 +1,7 @@
 import plotly
 import plotly.graph_objects as go
 import plotly.express as px
-from .. import utils
+from .. import pandas_utils
 import plotly.figure_factory as ff
 import numpy as np
 import pandas as pd
