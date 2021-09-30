@@ -1,7 +1,6 @@
 # Overview
 This tool allows to work collect and visualize easily scripts runned with Hydra. With it you can sort runs and experiment per tag, hyperparameters, group, etc.
 You can also export and visualize them by different ways using streamlit and plotly. 
-Here a working example http://138.131.217.125:8501/
 
 # Installation 
 
@@ -174,7 +173,7 @@ fig.show()
 ### Learning Curves
 
 
-# Terminology (Based on WandB):
+# Terminology:
 
 - **Project**: A collection of one or more experiments. (Each _Project_ has one or more days sub-folders, and then one or more time sub-folders) 
 - **Experiment**: A collection of one or more runs. Each experiment contains one or more runs subfolders 
