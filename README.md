@@ -194,3 +194,7 @@ Parallel coordinate plots will only look at the hyperparameters group.
 
 # To Do 
 1) Add documentation for learning curves
+
+# Use cases at CSEM
+
+[Cement process](https://gitlab.csem.local/611/cement-process.git): prediction of cement samples hardness from several measurements relative to chemical composition, particle size and spectrometric analysis. The module of the Experiment Tracker is located in `src/fdi/gmd_scripts/main_experiment_tracker.py`
