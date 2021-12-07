@@ -28,4 +28,3 @@ def load_run(run_path, query_string):
     file_loader = FileLoader(query_string)
     return file_loader.return_pandas(run_path)
 
-

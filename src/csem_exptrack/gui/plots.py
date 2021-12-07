@@ -110,6 +110,7 @@ def parallel_coordinates(param_df:pd.DataFrame,perf_df:pd.DataFrame):
         width=2000,
         height=1000)
     st.write(fig)
+    return fig
 
 def _create_parallel_coordiante_dict(param_df, perf_df):
     cols = sorted(set(param_df.columns.get_level_values(1))) 
