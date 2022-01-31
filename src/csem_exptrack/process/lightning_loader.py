@@ -28,7 +28,7 @@ class LightningLoader(base_loader.BaseLoader):
             print(f"WARNING: No epochs in {path}")
             return df_epochs
         else:
-            df_res = base_loader.create_metadata_df(logger)
+            df_res = self.create_metadata_df(path)
             df_res = df_res[np.repeat(df_res.columns.values, len(df_epochs.columns))]
             df_res.columns = df_epochs.columns
             df = pd.concat([df_epochs, df_res])
