@@ -4,7 +4,7 @@ import streamlit as st
 import numpy as np
 import pandas as pd
 from ... import load_files, plots, utils, process
-from .. import gui_utils
+from . import gui_utils
 import plotly.graph_objects as go
 import os
 import pickle
