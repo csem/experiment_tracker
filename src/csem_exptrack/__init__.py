@@ -8,7 +8,7 @@ from . import base_logger
 
 # Utility function for improving user experience
 # See README.md for more information about what a project or run is.
-def load_project(base_path, query_string):
+def load_project(base_path, query_string, logic="multirun"):
     """
     Utility function for using process.load_experiment easily.
     args:
@@ -17,7 +17,7 @@ def load_project(base_path, query_string):
     returns:
         df: A pandas dataframe of the data from the experiment (aka param_df)
     """
-    file_loader = FileLoader(query_string)
+    file_loader = FileLoader(query_string, logic)
     return file_loader.load_project(base_path) 
 
 def load_run(run_path, query_string):
@@ -29,4 +29,3 @@ def load_run(run_path, query_string):
     """
     file_loader = FileLoader(query_string)
     return file_loader.return_pandas(run_path)
-
