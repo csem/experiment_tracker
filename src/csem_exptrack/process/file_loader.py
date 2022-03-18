@@ -10,6 +10,8 @@ import json
 from datetime import datetime
 from collections import defaultdict
 import numpy as np
+from ..base_logger import logger
+
 
 class FileLoader(base_loader.BaseLoader):
     """
@@ -19,13 +21,16 @@ class FileLoader(base_loader.BaseLoader):
     loader = FileLoader(query_string="*.pkl") # Will look for all files path with suffix .pkl in each hydra run folder
     df = loader.load_folder("my_experiment/2021-08-17/12-32-14") # Will return the df with all the information"
     """
-    def __init__(self,query_string):
+    def __init__(self,query_string, logic="multirun"):
         if type(query_string) == str:
             self.query_string = [query_string]
         elif type(query_string) == list:
             self.query_string = query_string
         else:
             raise TypeError
+        
+        assert logic in ["multirun","singlerun"], "logic keyword must be either multirun or singlerun"
+        self.logic = logic
 
 
     def return_pandas(self,path:Path) -> pd.DataFrame:
@@ -37,7 +42,7 @@ class FileLoader(base_loader.BaseLoader):
         for query_string in self.query_string:
             npy_file_paths.extend(glob.glob(os.path.join(path,query_string)))
         if not npy_file_paths:
-            print(f"WARNING: No files of type {self.query_string} in {path} found")
+            logger.warn(f"No files of type {self.query_string} in {path} found")
             return pd.DataFrame()
         else:
 

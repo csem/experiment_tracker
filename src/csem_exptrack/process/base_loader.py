@@ -7,6 +7,8 @@ from pathlib import Path
 from datetime import datetime
 from . import utils
 import yaml
+import warnings
+from ..base_logger import logger
 
 class BaseLoader():
     def __init__(self):
@@ -19,12 +21,22 @@ class BaseLoader():
         dfs = []
         for dates, h_m_s in utils.traverse_folders(base_project_path):
             str_time = dates + " " + h_m_s
-            exp_time = datetime.strptime(str_time, "%Y-%m-%d %H-%M-%S")
+            try:
+                exp_time = datetime.strptime(str_time, "%Y-%m-%d %H-%M-%S")
+            except ValueError:
+                logger.warn(f"Could not parse time {str_time}")
+                continue
             curr_df = self.load_experiment(base_project_path, exp_time)
+            if len(curr_df)==0:
+                logger.warn(f"No data for {exp_time}")
+                continue
             t = pd.MultiIndex.from_tuples([(str_time,x) for x in curr_df.columns])
             curr_df.columns = t
             dfs.append(curr_df)
         
+        if len(dfs)==0:
+            raise ValueError("No experiments data found")
+    
         df = pd.concat(dfs, axis=1)
         try:
             df = df.drop_duplicates()
@@ -41,15 +53,26 @@ class BaseLoader():
         path = Path(os.path.join(folder, date, h_m_s))
         runs = os.listdir(path)
         runs = [x for x in runs if x.isdigit()]
-        if not runs:
-            print(f"WARNING: No runs for {time}")
-        for run in runs:
-            curr_path = Path(os.path.join(path,run))
-            df = self.return_pandas(curr_path)
+        if self.logic == "multirun":
+            if not runs:
+                logger.warn(f"No runs for {date} {time}")
+            for run in runs:
+                curr_path = Path(os.path.join(path,run))
+                df = self.return_pandas(curr_path)
+                if len(df)>0:
+                    df.columns = [int(curr_path.stem)]
+                dfs.append(df)
+        elif self.logic == "singlerun":
+            df = self.return_pandas(path)
             if len(df)>0:
-                df.columns = [int(curr_path.stem)]
+                df.columns = [0]
             dfs.append(df)
-        return pd.concat(dfs, axis=1)
+        else:
+            raise KeyError("logic must be either multirun or singlerun")
+        if not dfs:
+            return pd.DataFrame()
+        else: 
+            return pd.concat(dfs, axis=1)
 
     def return_pandas(self,path) -> pd.DataFrame:
         NotImplementedError

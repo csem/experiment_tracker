@@ -6,7 +6,7 @@ You can also export and visualize them by different ways using streamlit and plo
 
 #### Adding to an existing repo
 For adding CSEM_ExperimentTracker as a submodules in a repo for the first time just run:
-`git submodule add git@gitlab.csem.local:611/csem_experimenttracker.git`
+`git submodule add https://github.com/csem/ExperimentTracker.git`
 Then add and commit the two files 
 
 ```
@@ -21,7 +21,7 @@ When cloning the repo with a submodule remember to add `--recurse-submodules --r
 
 #### Pip Installation
 After you have cloned CSEM_ExperimentTracker,  install it with:
-`pip install -e csem_experimenttracker/`
+`pip install -e ExperimentTracker/`
 
 # Getting started
 ## Collect your results
@@ -55,12 +55,11 @@ my_experiment/
         └── multirun.yaml
 ```
 
-The following code snippets will return a pd.DataFrame containing the parameters for each and the path to your results (i.e. the npy files).
+The following code snippets will return a pd.DataFrame containing the parameters for each and the path to all files with npy suffix.
 
 ```python
-from csem_exptrack import process
-loader = process.file_loader.FileLoader(query_string="*.npy")
-df = loader.load_project("my_experiment")
+import csem_exptrack
+loader = csem_exptrack.load_project(base_path="experiments", query_string="*.ckpt")
 ```
 
 if you want to return also the path to your log files you can pass a list instead of a string as parameter to query_string 
@@ -193,7 +192,3 @@ Parallel coordinate plots will only look at the hyperparameters group.
 
 # To Do 
 1) Add documentation for learning curves
-
-# Use cases at CSEM
-
-[Cement process](https://gitlab.csem.local/611/cement-process.git): prediction of cement samples hardness from several measurements relative to chemical composition, particle size and spectrometric analysis. The module of the Experiment Tracker is located in `src/fdi/gmd_scripts/main_experiment_tracker.py`
