@@ -8,16 +8,16 @@ from . import base_logger
 
 # Utility function for improving user experience
 # See README.md for more information about what a project or run is.
-def load_project(base_path, query_string, logic="multirun"):
+def load_project(base_path, query_string, logic="multirun", min_required_files=1):
     """
     Utility function for using process.load_experiment easily.
     args:
         base_path: Path to the base directory in Hydra Hierarchy
-        query_string: String to be used in the file_loader for deciding which path to load
+        query_string: String or List to be used in the file_loader for deciding which path to load
     returns:
         df: A pandas dataframe of the data from the experiment (aka param_df)
     """
-    file_loader = FileLoader(query_string, logic)
+    file_loader = FileLoader(query_string, logic, min_required_files)
     return file_loader.load_project(base_path) 
 
 def load_run(run_path, query_string):
