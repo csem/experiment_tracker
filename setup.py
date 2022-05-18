@@ -13,6 +13,8 @@ setup(
         "streamlit",
         "flatten-dict",
         "coloredlogs"],
+    package_data={'': ['gui/resources/*.svg']},
+    include_package_data=True,
     # entry_points={
     #     "console_scripts": [
     #         "clean_folder=CSEM_ExperimentTracker.load_files:delete_empty_folder",
