@@ -14,13 +14,17 @@ class BaseLoader():
     def __init__(self):
         pass
 
-    def load_project(self, base_project_path: Path):
+    def load_project(self, base_project_path: Path, filter_date: datetime = None, filter_hms: datetime = None):
         """
         base_project_path: folder containing multiple experiments (e.g. a folder with inside multiples year-month-day/hour-min-sec folders)
         """
         dfs = []
-        for dates, h_m_s in utils.traverse_folders(base_project_path):
-            str_time = dates + " " + h_m_s
+        for date, h_m_s in utils.traverse_folders(base_project_path):
+            if filter_date is not None and date != filter_date:
+                continue
+            if filter_hms is not None and h_m_s != filter_hms:
+                continue
+            str_time = date + " " + h_m_s
             try:
                 exp_time = datetime.strptime(str_time, "%Y-%m-%d %H-%M-%S")
             except ValueError:
