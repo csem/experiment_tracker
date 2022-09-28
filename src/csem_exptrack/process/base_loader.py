@@ -18,6 +18,22 @@ class BaseLoader():
         """
         base_project_path: folder containing multiple experiments (e.g. a folder with inside multiples year-month-day/hour-min-sec folders)
         """
+        if filter_date == "last" or filter_hms == "last":
+            # Iterarate over the folders and get the last one
+            dates = os.listdir(base_project_path)
+            dates = [x for x in dates if x != ".DS_Store"]
+            dates = [datetime.strptime(x, "%Y-%m-%d") for x in dates]
+            dates.sort()
+            filter_date = dates[-1]
+            hms = os.listdir(Path(os.path.join(base_project_path, filter_date.strftime("%Y-%m-%d"))))
+            hms = [x for x in hms if x != ".DS_Store"]
+            hms = [datetime.strptime(x, "%H-%M-%S") for x in hms]
+            hms.sort()
+            filter_hms = hms[-1]
+            filter_date = filter_date.strftime("%Y-%m-%d")
+            filter_hms = filter_hms.strftime("%H-%M-%S")
+
+
         dfs = []
         for date, h_m_s in utils.traverse_folders(base_project_path):
             if filter_date is not None and date != filter_date:
