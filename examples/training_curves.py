@@ -25,7 +25,7 @@ def training_curves(fin_df,exp, df_plot, opt):
     fig = go.Figure()
     colors = px.colors.qualitative.Plotly
     color_counter = 0
-    col1, col2 = st.beta_columns(2)
+    col1, col2 = st.columns(2)
     measurement = False
     if col1.button("Cut measurements"):
         measurement = True

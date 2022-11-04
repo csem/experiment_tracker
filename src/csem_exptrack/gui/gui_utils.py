@@ -14,7 +14,7 @@ def render_svg(path):
 
 def header():
     st.set_page_config(layout="wide")
-    col1, col2 = st.beta_columns(2)
+    col1, col2 = st.columns(2)
     title = """
                 <style>
                 .big-font {

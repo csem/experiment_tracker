@@ -40,7 +40,7 @@ def plots_epochs(
 
 
 
-def interactive_confusion_matrix(conf, classes, colorscale="electric", width=600, height=500, ispercent = False):
+def interactive_confusion_matrix(conf, class_names=None, colorscale="electric", width=600, height=500, ispercent = False):
     """
     args:
         conf: confusion matrix
@@ -50,29 +50,17 @@ def interactive_confusion_matrix(conf, classes, colorscale="electric", width=600
         height: height of plot
         ispercent: if true, plot is in percentage
     """
-    x = classes
-    y = classes
+    x = class_names
+    y = class_names
     if ispercent:
-        z_text_train = [[str(np.round(y,2)*100) + "%" for y in x] for x in conf.T]
+        z_text_train = [[str(np.round(y,2)*100)[:3] + "%" for y in x] for x in conf.T]
     else:
         z_text_train = [[str(y) for y in x] for x in conf.T]
 
     hover1 = []
     for z in range(len(z_text_train)):
         hover1.append(
-            [
-                "Actual Class:"
-                + x[i]
-                + "<br>"
-                + "Predicted:"
-                + y[z]
-                + "<br>"
-                + "Instances:"
-                + str(
-                    z_text_train[z][i]
-                )  # + "Variance " +  str(confusion_matrix_variance[i,z])
-                for i, _ in enumerate(z_text_train[z])
-            ]
+            return_annotations(z,z_text_train,x,y)
         )
 
     fig1 = ff.create_annotated_heatmap(
@@ -91,6 +79,16 @@ def interactive_confusion_matrix(conf, classes, colorscale="electric", width=600
         width=width, height=height, autosize=False, margin=dict(t=0, b=0, l=0, r=0)
     )
     return fig1
+
+def return_annotations(z,z_text_train, x,y):
+    tmp_array = []
+    for i, _ in enumerate(z_text_train[z]):      
+        tmp = "Actual Class:"+ x[i] + "<br>" + "Predicted:" + y[z] + "<br>" + "Instances:" + str(z_text_train[z][i]) 
+        tmp_array.append(tmp)
+    return tmp_array
+                
+        
+    
 
 def parallel_coordinates(param_df:pd.DataFrame,perf_df:pd.DataFrame):  
     param_df = param_df.loc[:, perf_df.index]
