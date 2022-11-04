@@ -62,6 +62,11 @@ import csem_exptrack
 loader = csem_exptrack.load_project(base_path="experiments", query_string="*.ckpt")
 ```
 
+You can also specify "filter_hms" argument in order to collect only day in a specific day
+```python
+csem_exptrack.load_project(base_path="final_results/train_wc_uncond", query_string="results.json", filter_hms="2022-10-09")
+```
+
 if you want to return also the path to your log files you can pass a list instead of a string as parameter to query_string 
 
 ```python
