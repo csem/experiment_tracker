@@ -2,22 +2,7 @@
 This tool allows to work collect and visualize easily scripts runned with Hydra. With it you can sort runs and experiment per tag, hyperparameters, group, etc.
 You can also export and visualize them by different ways using streamlit and plotly. 
 
-# Installation 
-
-#### Adding to an existing repo
-For adding CSEM_ExperimentTracker as a submodules in a repo for the first time just run:
-`git submodule add https://github.com/csem/ExperimentTracker.git`
-Then add and commit the two files 
-
-```
-Changes to be committed:
-  (use "git restore --staged <file>..." to unstage)
-        new file:   .gitmodules
-        new file:   csem_experimenttracker
-```
-
-
-#### Installation
+# Installation
 1) Clone the repo via: `git clone https://github.com/csem/ExperimentTracker.git`
 2) install it with:
 `pip install -e ExperimentTracker/`
