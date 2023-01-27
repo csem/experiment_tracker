@@ -16,11 +16,10 @@ Changes to be committed:
         new file:   csem_experimenttracker
 ```
 
-#### Cloning from a remote repo containing it
-When cloning the repo with a submodule remember to add `--recurse-submodules --remote-submodules` to the git clone command. Otherwise submodules will not be used.
 
-#### Pip Installation
-After you have cloned CSEM_ExperimentTracker,  install it with:
+#### Installation
+1) Clone the repo via: `git clone https://github.com/csem/ExperimentTracker.git`
+2) install it with:
 `pip install -e ExperimentTracker/`
 
 # Getting started
