@@ -43,7 +43,7 @@ The following code snippets will return a pd.DataFrame containing the parameters
 
 ```python
 import csem_exptrack
-loader = csem_exptrack.load_project(base_path="experiments", query_string="*.ckpt")
+loader = csem_exptrack.load_project(base_path="experiments", query_string="*.ckpt", logic="multirun") # logic can either be "multirun" [if hydra is run with -m flag] or "singlerun" 
 ```
 
 You can also specify "filter_hms" argument in order to collect only day in a specific day
