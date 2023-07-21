@@ -99,7 +99,7 @@ class BaseLoader():
 
     @staticmethod
     def create_metadata_df(path: Path):
-        with open(os.path.join(path, ".hydra/config.yaml"), "r") as metadata:
+        with open(os.path.join(path, Path(".hydra/config.yaml")), "r") as metadata:
             metadata = yaml.safe_load(metadata)
         
         dfs = []
@@ -171,7 +171,7 @@ class BaseLoader_fdi():
 
 
     def create_metadata_df(self, path: Path):
-        with open(os.path.join(path, ".hydra/config.yaml"), "r") as metadata:
+        with open(os.path.join(path, Path(".hydra/config.yaml")), "r") as metadata:
             metadata = yaml.safe_load(metadata)
 
         dfs = []
