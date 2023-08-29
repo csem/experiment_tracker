@@ -179,5 +179,3 @@ will appear together in the resulting pd.DataFrame. Same for the "dataset" group
 All the other parameters will be categorized in the "other" group.
 Parallel coordinate plots will only look at the hyperparameters group. 
 
-# To Do 
-1) Add documentation for learning curves
