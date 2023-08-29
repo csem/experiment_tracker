@@ -60,11 +60,11 @@ df = loader.load_project("my_experiment")
 ```
 
 The returned pd.DataFrame contains the paths of your results relative to the folder where you run your code the parameters, from .hydra/config, of each run.
-The pd.DataFrame has hierchical structure, both for columns and rows.
-- Columns:
+The pd.DataFrame has hierchical structure for rows.
+- Rows:
   - Level 0: **Date**: The date of your experiment (i.e. 2021-01-26 17-07-39)
   - Level 1: **Run**: The integer representing the value of your run (0 to 3)
-- Rows:
+- Columns:
   - Level 0: **Parameters**: Hydra config variables + [collected_path_0,..,collected_path_n]
 
 You can know more about hierchical pandas dataframe here: 
