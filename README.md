@@ -162,15 +162,4 @@ fig.show()
 - **Experiment**: A collection of one or more runs. Each experiment contains one or more runs subfolders 
 - **Run**: A training of a learning algorithm plus its performance evaluation 
 
-# Formatting the hydra file
-All parameters beloging to an indentation group called "hyperparameters", for instance:
-```
-hyperparameters:
-  lm_bs: 128 
-  lm_last_layer_epochs: 7
-  lm_all_layers_epochs: 6
-```
-will appear together in the resulting pd.DataFrame. Same for the "dataset" group.
-All the other parameters will be categorized in the "other" group.
-Parallel coordinate plots will only look at the hyperparameters group. 
 
