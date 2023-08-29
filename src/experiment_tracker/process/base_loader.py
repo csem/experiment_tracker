@@ -50,14 +50,14 @@ class BaseLoader():
             if len(curr_df)==0:
                 logger.warn(f"No data for {exp_time}")
                 continue
-            t = pd.MultiIndex.from_tuples([(str_time,x) for x in curr_df.columns])
-            curr_df.columns = t
+            t = pd.MultiIndex.from_tuples([(str_time,x) for x in curr_df.index])
+            curr_df.index = t
             dfs.append(curr_df)
         
         if len(dfs)==0:
             raise ValueError("No experiments data found")
     
-        df = pd.concat(dfs, axis=1)
+        df = pd.concat(dfs, axis=0)
         try:
             df = df.drop_duplicates()
         except TypeError:
@@ -80,19 +80,20 @@ class BaseLoader():
                 curr_path = Path(os.path.join(path,run))
                 df = self.return_pandas(curr_path)
                 if len(df)>0:
-                    df.columns = [int(curr_path.stem)]
+                    df.index = [int(curr_path.stem)]
                 dfs.append(df)
         elif self.logic == "singlerun":
             df = self.return_pandas(path)
             if len(df)>0:
-                df.columns = [0]
+                df.index = [0]
             dfs.append(df)
         else:
             raise KeyError("logic must be either multirun or singlerun")
+        
         if not dfs:
             return pd.DataFrame()
         else: 
-            return pd.concat(dfs, axis=1)
+            return pd.concat(dfs, axis=0)
 
     def return_pandas(self,path) -> pd.DataFrame:
         NotImplementedError

@@ -59,6 +59,6 @@ class FileLoader(base_loader.BaseLoader):
                 df.columns = df_res.columns
                 # Combine index in just one level
                 
-                df = pd.concat([df_res,df])
+                df = pd.concat([df_res,df]).T
         return df
 
