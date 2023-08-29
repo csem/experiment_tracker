@@ -73,87 +73,15 @@ https://pandas.pydata.org/pandas-docs/stable/user_guide/advanced.html
 Once you have the pandas dataframe you can do whataver you want with it! Here some examples:
 1. Going through each run and load the npy file in a list, with the same order as the pd.DataFrame.
 ```python
-results = [np.load(x,allow_pickle=True) for x in  df.loc[("path",0)]]
+results = [np.load(x,allow_pickle=True) for x in  df.loc[:,collected_path_0]]
 ```
 
 
 2. Get all parameters for run 1
 ```python
-df.loc[:, ('2021-01-26 17-07-39', 1)]
+df.loc[ ('2021-01-26 17-07-39', 1),:]
 ```
 
-## Visualize your results
-Before starting you should be some what familiar with Streamlit. If you aren't, just spend 20 minutes looking at https://docs.streamlit.io/en/stable/getting_started.html.
-This library offers some utility functions for creating CSEM GUI and visualize your results nicely.
-Current supported plots:
-* Parallel Coordinates 
-* Confusion Matrix
-* Learning Curves
-
-you can use them by importing 
-```python
-from experiment_tracker.gui import plots
-```
-
-### Parallel Coordinates
-```python
-plots.parallel_coordinates(param_df: pd.DataFrame, perf_df: pd.DataFrame) --> None 
-```
-param_df: pd.DataFrame mentioned above (i.e. the one you load with process.file_loader).  It must contain a level 0 named "hyperparameters".
-perf_df: pd.DataFrmae pandas dataframe with columns the metrics you are interested and with two-level rows with date and runs. The runs must exists in param_df, and can be also a subset. 
-
-Example of perf_df with one single columns:
-```python
-                       best_accuracy
-2021-01-26 17-07-39 0       0.702448
-                    1       0.4345
-                    2       0.681733
-```
-
-These are also valid:
-- Subset of runs
-```python
-                       best_accuracy
-2021-01-26 17-07-39 0       0.702448
-                    2       0.681733
-```
-- Multiple metrics 
-```python
-                       best_accuracy  Reward
-2021-01-26 17-07-39 0       0.702448       3
-                    2       0.681733       9
-```
-
-
-### Confusion Matrix 
-```python
-plots.interactive_confusion_matrix(conf: np.array, classes: List, colorscale="electric"): --> fig
-```
-This function will display a interactive (i.e. you can hoover over cells for more details) confusion matrix.
-
-Arguments:
-* conf: 2D np.array representing the confusion matrix. Element on the same row belong to the same class, Element on the same column are predicted to belong to the same class.
-* classes: list containing the labels
-* colorscale: color style for the plotl
-
-
-Usage example:
-```python
-conf = np.array([[343,   9,  23,  39],
-       [  6, 200,   0,   2],
-       [ 39,   2, 161,  10],
-       [ 59,   2,  25, 108]])
-classes = ["First Class", "Second Class", "Third Class", "Fourth Class"]
-colorscale = "electric"
-fig = plots.interactive_confusion_matrix(conf, classes, colorscale="electric")
-fig.show()
-```
-343 is the prediction of class 1 given the ground truth is class 1. 6 is the prediction of class 1 given that the ground truth is class 2.
-
-
-
-
-### Learning Curves
 
 
 # Terminology:
