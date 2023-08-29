@@ -5,6 +5,8 @@ from .process.file_loader import FileLoader
 
 # Utility function for improving user experience
 # See README.md for more information about what a project or run is.
+
+
 def load_project(base_path, query_string, logic="multirun", min_required_files=1, filter_date=None, filter_hms=None): 
     """
     Utility function for using process.load_experiment easily.
@@ -26,3 +28,7 @@ def load_run(run_path, query_string):
     """
     file_loader = FileLoader(query_string)
     return file_loader.return_pandas(run_path)
+
+
+# Utility function for improving user experience
+load = load_project

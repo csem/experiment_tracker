@@ -52,11 +52,13 @@ class FileLoader(base_loader.BaseLoader):
                 logger.warn(f"Not enough files of type {self.query_string} in {path} found")
                 return pd.DataFrame()
             else:
-                index = pd.MultiIndex.from_tuples([("path", i) for i in range(len(npy_file_paths))])
+                index = [f"collected_path_{i}" for i in range(len(npy_file_paths))]
                 df = pd.DataFrame({"path":npy_file_paths},index=index)
                 df_res = self.create_metadata_df(path)
                 df_res = df_res[np.repeat(df_res.columns.values, len(df.columns))]
                 df.columns = df_res.columns
+                # Combine index in just one level
+                
                 df = pd.concat([df_res,df])
         return df
 
