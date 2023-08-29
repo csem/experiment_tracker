@@ -3,9 +3,9 @@ This tool allows to work collect and visualize easily scripts runned with Hydra.
 You can also export and visualize them by different ways using streamlit and plotly. 
 
 # Installation
-1) Clone the repo via: `git clone https://github.com/csem/ExperimentTracker.git`
+1) Clone the repo via: `git clone https://github.com/csem/experiment_tracker.git`
 2) install it with:
-`pip install -e ExperimentTracker/`
+`pip install -e experiment_tracker/`
 
 # Getting started
 ## Collect your results
@@ -42,19 +42,19 @@ my_experiment/
 The following code snippets will return a pd.DataFrame containing the parameters for each and the path to all files with npy suffix.
 
 ```python
-import csem_exptrack
-df = csem_exptrack.load_project(base_path="experiments", query_string="*.ckpt", logic="multirun") # logic can either be "multirun" [if hydra is run with -m flag] or "singlerun" 
+import experiment_tracker
+df = experiment_tracker.load_project(base_path="experiments", query_string="*.ckpt", logic="multirun") # logic can either be "multirun" [if hydra is run with -m flag] or "singlerun" 
 ```
 
 You can also specify "filter_hms" argument in order to collect only day in a specific day
 ```python
-df = csem_exptrack.load_project(base_path="final_results/train_wc_uncond", query_string="results.json", filter_hms="2022-10-09")
+df = experiment_tracker.load_project(base_path="final_results/train_wc_uncond", query_string="results.json", filter_hms="2022-10-09")
 ```
 
 if you want to return also the path to your log files you can pass a list instead of a string as parameter to query_string 
 
 ```python
-from csem_exptrack import process
+from experiment_tracker import process
 loader = process.file_loader.FileLoader(query_string=["*.npy","*.log"])
 df = loader.load_project("my_experiment")
 ```
@@ -97,7 +97,7 @@ Current supported plots:
 
 you can use them by importing 
 ```python
-from csem_exptrack.gui import plots
+from experiment_tracker.gui import plots
 ```
 
 ### Parallel Coordinates
