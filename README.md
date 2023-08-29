@@ -65,8 +65,7 @@ The pd.DataFrame has hierchical structure, both for columns and rows.
   - Level 0: **Date**: The date of your experiment (i.e. 2021-01-26 17-07-39)
   - Level 1: **Run**: The integer representing the value of your run (0 to 3)
 - Rows:
-  - Level 0: **param_df**: Can be Hyperparameters, Dataset, Other, Path. See below "formatting the hydra file"
-  - Level 1: **Parameters**: Parameters for each subgroup
+  - Level 0: **Parameters**: Hydra config variables + [collected_path_0,..,collected_path_n]
 
 You can know more about hierchical pandas dataframe here: 
 https://pandas.pydata.org/pandas-docs/stable/user_guide/advanced.html
@@ -77,12 +76,8 @@ Once you have the pandas dataframe you can do whataver you want with it! Here so
 results = [np.load(x,allow_pickle=True) for x in  df.loc[("path",0)]]
 ```
 
-2. Get all the hyperparameters:
-```python
-df.loc["hyperparameters"]
-```
 
-3. Get all parameters for run 1
+2. Get all parameters for run 1
 ```python
 df.loc[:, ('2021-01-26 17-07-39', 1)]
 ```
