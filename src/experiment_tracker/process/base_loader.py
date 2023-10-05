@@ -103,26 +103,12 @@ class BaseLoader():
         with open(os.path.join(path, Path(".hydra/config.yaml")), "r") as metadata:
             metadata = yaml.safe_load(metadata)
         
-        dfs = []
-        for category in ["hyperparameters","dataset"]:
-
-            curr_dict = flatten(metadata.get(category, {}), reducer='path')
-            df_curr = pd.DataFrame.from_dict(curr_dict, orient="index")
-
-            if category in metadata:
-                exp_dict = flatten(metadata.get(category, {}), reducer='path')
-                df_curr.index = pd.MultiIndex.from_tuples(
-                    [(category, x) for x in exp_dict]
-                )
-            
-            dfs.append(df_curr)
-            metadata.pop(category, None)
         
         other = flatten(metadata, reducer='path')
         df_other = pd.DataFrame.from_dict(other, orient="index")
         df_other.index = [x for x in other]
-        dfs.append(df_other)
-        return pd.concat(dfs)
+        #dfs.append(df_other)
+        return df_other
 
 
 

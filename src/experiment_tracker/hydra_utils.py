@@ -15,7 +15,7 @@ def save_hash(cfg):
         # Create a file with the commit hash
         save_dict = {}
         save_dict["commit_hash"] = commit_hash
-        with open("commit_info.yaml", "w") as f:
+        with open(f"commit_{commit_hash}.json", "w") as f:
             json.dump(save_dict, f, indent=4)
 
 
