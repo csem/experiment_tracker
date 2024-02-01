@@ -9,7 +9,7 @@ def main():
     st.set_page_config(layout="wide")
     st.markdown("## Results")
 
-    query_string = st.text_input("Which rows do you want to load?", "*") # This means we are going to collect all the files in the folder
+    query_string = st.text_input("Which rows do you want to load? Only the rows with this file will be loaded", "*") # This means we are going to collect all the files in the folder
     # This command load all the multirun experiments (i.e. the one run with the flag -m) in the folder "multirun" 
     df_multirun = experiment_tracker.load_project(base_path="multirun", query_string=query_string, logic="multirun")
     # This command load all the singlerun experiments (i.e. the one run without the flag -m) in the folder "output"
@@ -41,7 +41,6 @@ def main():
     # For example, let's say we want to filter by the dataset
     dataset = st.selectbox("Dataset", ["digits","iris"])
     df_multirun = df_multirun[df_multirun["dataset"] == dataset]
-    df_singlerun = df_singlerun[df_singlerun["dataset"] == dataset]
 
     # Let's say we want to filter by the estimator
     estimator = st.selectbox("Estimator", ["random_forest","svm","knn"])
