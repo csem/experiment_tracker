@@ -3,6 +3,7 @@ import json
 from hydra.core.hydra_config import HydraConfig
 from pathlib import Path
 import hydra 
+from omegaconf import errors 
 
 def save_hash(cfg):
     if cfg.automatic_commit.activated:
@@ -11,11 +12,11 @@ def save_hash(cfg):
         
         try: 
             hydra_num = HydraConfig.get().job.num
-        except ValueError:
+        except errors.MissingMandatoryValue:
             hydra_num = 0
 
         if repo.is_dirty() and hydra_num == 0:
-            raise ValueError("Working directory is dirty. Please commit your changes before running the job.")
+            raise ValueError("\n\n Working directory is dirty. Please commit your changes before running the job. \n If you want to run the job anyway, set automatic_commit.activated to False in the config file. \n\n")
         # Get the current commit hash
         commit_hash = repo.head.object.hexsha
 
