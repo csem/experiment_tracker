@@ -31,7 +31,9 @@ def main(cfg):
         y_train = y[:100]
         X_test = X[100:]
         y_test = y[100:]
-
+    else:
+        raise ValueError("Dataset not supported")
+    
     print("X shape:", X.shape)
     print("y shape:", y.shape)
     
