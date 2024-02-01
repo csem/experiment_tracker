@@ -3,6 +3,7 @@ normalize: True # Options: True, False
 seed: 42
 save_train_data: True 
 dataset: digits
+trigger_error: False
 automatic_commit:
   activated: True
   working_dir: /csem/divr/users/tbe/repo/experiment_tracker

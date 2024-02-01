@@ -34,9 +34,17 @@ def main(cfg):
     else:
         raise ValueError("Dataset not supported")
     
+    if cfg.trigger_error is True:
+        raise ValueError("Trigger error is True")
+    
     print("X shape:", X.shape)
     print("y shape:", y.shape)
     
+    if cfg.normalise:
+        print("Normalising data")
+        X_train = X_train / X_train.max()
+        X_test = X_test / X_train.max()
+
     
     if cfg.estimator == "random_forest":
         from sklearn.ensemble import RandomForestClassifier
