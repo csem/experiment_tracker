@@ -4,6 +4,7 @@ from hydra.core.hydra_config import HydraConfig
 from pathlib import Path
 import hydra 
 from omegaconf import errors 
+from typing import Tuple
 
 def save_hash(cfg):
     if cfg.automatic_commit.activated:
@@ -51,3 +52,10 @@ def log_book():
     logger.addHandler(file_handler)
     # Add message to the logbook
     return logger
+
+
+def iterate_paths(df, relative_path_to_base_path) -> Tuple[Tuple, str]:
+    for row in df.iterrows():
+        parent_path = Path(row[1]["collected_path_0"]).parent 
+        file_path = parent_path / relative_path_to_base_path
+        yield row[0], file_path
