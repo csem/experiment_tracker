@@ -40,7 +40,7 @@ def main(cfg):
     print("X shape:", X.shape)
     print("y shape:", y.shape)
     
-    if cfg.normalise:
+    if cfg.normalize:
         print("Normalising data")
         X_train = X_train / X_train.max()
         X_test = X_test / X_train.max()
