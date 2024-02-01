@@ -1,5 +1,5 @@
 try:
-    from sklearn.datasets import load_digits
+    from sklearn.datasets import load_digits, load_iris
 except ImportError:
     print("Please install scikit-learn to run this example")
     raise
@@ -11,21 +11,31 @@ from experiment_tracker import hydra_utils
 def main(cfg):
 
     hydra_utils.save_hash(cfg)
-    digits = load_digits()
+    print("Dataset:", cfg.dataset)
+    if cfg.dataset == "digits":
+        digits = load_digits()
+        X = digits.data
+        y = digits.target
 
+        X_train = X[:1000]
+        y_train = y[:1000]
+        X_test = X[1000:]
+        y_test = y[1000:]
 
-    X = digits.data
-    y = digits.target
+    elif cfg.dataset == "iris":
+        iris = load_iris()
+        X = iris.data
+        y = iris.target
 
-    X_train = X[:1000]
-    y_train = y[:1000]
-    X_test = X[1000:]
-    y_test = y[1000:]
-
+        X_train = X[:100]
+        y_train = y[:100]
+        X_test = X[100:]
+        y_test = y[100:]
 
     print("X shape:", X.shape)
     print("y shape:", y.shape)
-
+    
+    
     if cfg.estimator == "random_forest":
         from sklearn.ensemble import RandomForestClassifier
         clf = RandomForestClassifier(n_estimators=50, n_jobs=-1, random_state=cfg.seed)

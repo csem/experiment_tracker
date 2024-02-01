@@ -1,13 +1,20 @@
 import git
 import json
 from hydra.core.hydra_config import HydraConfig
-
+from pathlib import Path
+import hydra 
 
 def save_hash(cfg):
     if cfg.automatic_commit.activated:
         # Check if there is any change in the working directory. If so, raise an error
         repo = git.Repo(cfg.automatic_commit.working_dir)
-        if repo.is_dirty() and HydraConfig.get().job.num == 0:
+        
+        try: 
+            hydra_num = HydraConfig.get().job.num
+        except ValueError:
+            hydra_num = 0
+
+        if repo.is_dirty() and hydra_num == 0:
             raise ValueError("Working directory is dirty. Please commit your changes before running the job.")
         # Get the current commit hash
         commit_hash = repo.head.object.hexsha
