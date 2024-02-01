@@ -13,6 +13,7 @@ def load_project(base_path, query_string, logic="multirun", min_required_files=1
     args:
         base_path: Path to the base directory in Hydra Hierarchy
         query_string: String or List to be used in the file_loader for deciding which path to load
+        logic: "multirun" or "singlerun". If multirun, will expect data in the format of a multirun experiment. If singlerun, will expect data in the format of a single run experiment.
     returns:
         df: A pandas dataframe of the data from the experiment (aka param_df)
     """

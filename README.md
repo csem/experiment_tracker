@@ -8,6 +8,34 @@ You can also export and visualize them by different ways using streamlit and plo
 `pip install -e experiment_tracker/`
 
 # Getting started
+## Try out the example
+
+#### Populate the outputs folder
+Once you have installed the package you can try out the example by running:
+```bash
+python examples/training.py
+```
+This will create a folder called outputs. You can also try out different options by running:
+```bash
+python examples/python examples/training.py
+.py --help
+```
+Whenever you run the example you will get a new folder in outputs with the current date and time. Inside this folder you will find the results of your experiment with the configuration you have specified.
+If you want to populate quickly the outputs folder with some results you can run:
+```bash
+source examples/populate_outputs.sh
+```
+#### Visualize the results
+Now you have some results in your outputs folder you can visualize them by running:
+```bash
+streamlit run examples/streamlit_example.py
+```
+
+
+
+
+
+
 ## Collect your results
 Let's assume you have run an experiment "my_experiment" of 3 runs (see below for the terminology) on 2021-01-26 at 17:07:39. And that, for each run you are saving a npy file and a log file. 
 

@@ -64,8 +64,8 @@ def main(cfg):
     # Save a dictionary with the results
     df_train = pd.DataFrame({"y_true": y_train, "y_pred": res_train})
     df_test = pd.DataFrame({"y_true": y_test, "y_pred": res_test})
-    df_train.to_csv("train.pkl")
-    df_test.to_csv("test.pkl")
+    df_train.to_pickle("train.pkl")
+    df_test.to_pickle("test.pkl")
 
 
 

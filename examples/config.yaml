@@ -5,5 +5,5 @@ save_train_data: True
 dataset: digits
 trigger_error: False
 automatic_commit:
-  activated: True
+  activated: False
   working_dir: /csem/divr/users/tbe/repo/experiment_tracker
