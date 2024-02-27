@@ -1,0 +1,9 @@
+estimator: random_forest # Options: random_forest, svm, knn
+normalize: True # Options: True, False
+seed: 42
+save_train_data: True 
+dataset: digits
+trigger_error: False
+automatic_commit:
+  activated: False
+  working_dir: /csem/divr/users/tbe/repo/experiment_tracker

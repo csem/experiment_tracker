@@ -1,14 +1,23 @@
 import git
 import json
 from hydra.core.hydra_config import HydraConfig
-
+from pathlib import Path
+import hydra 
+from omegaconf import errors 
+from typing import Tuple
 
 def save_hash(cfg):
     if cfg.automatic_commit.activated:
         # Check if there is any change in the working directory. If so, raise an error
         repo = git.Repo(cfg.automatic_commit.working_dir)
-        if repo.is_dirty() and HydraConfig.get().job.num == 0:
-            raise ValueError("Working directory is dirty. Please commit your changes before running the job.")
+        
+        try: 
+            hydra_num = HydraConfig.get().job.num
+        except errors.MissingMandatoryValue:
+            hydra_num = 0
+
+        if repo.is_dirty() and hydra_num == 0:
+            raise ValueError("\n\n Working directory is dirty. Please commit your changes before running the job. \n If you want to run the job anyway, set automatic_commit.activated to False in the config file. \n\n")
         # Get the current commit hash
         commit_hash = repo.head.object.hexsha
 
@@ -43,3 +52,10 @@ def log_book():
     logger.addHandler(file_handler)
     # Add message to the logbook
     return logger
+
+
+def iterate_paths(df, relative_path_to_base_path) -> Tuple[Tuple, str]:
+    for row in df.iterrows():
+        parent_path = Path(row[1]["collected_path_0"]).parent 
+        file_path = parent_path / relative_path_to_base_path
+        yield row[0], file_path

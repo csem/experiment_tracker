@@ -7,3 +7,5 @@ data/*
 multirun/*
 env/*
 build/
+outputs/*
+multirun/*
