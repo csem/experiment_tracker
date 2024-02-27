@@ -3,12 +3,13 @@ from . import process
 from .gui.gui_utils import header
 from .process.file_loader import FileLoader
 from . import hydra_utils
-
+from typing import Optional
+from datetime import datetime
 # Utility function for improving user experience
 # See README.md for more information about what a project or run is.
 
 
-def load_project(base_path, query_string, logic="multirun", min_required_files=1, filter_date=None, filter_hms=None): 
+def load_project(base_path, query_string, logic="multirun", min_required_files=1, filter_date:Optional[datetime] = None, filter_hms: Optional[datetime]=None): 
     """
     Utility function for using process.load_experiment easily.
     args:
