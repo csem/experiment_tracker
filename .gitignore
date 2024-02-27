@@ -6,3 +6,4 @@
 data/*
 multirun/*
 env/*
+build/
