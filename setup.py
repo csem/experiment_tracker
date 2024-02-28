@@ -12,7 +12,7 @@ setup(
         "plotly",
         "streamlit",
         "flatten-dict",
-        "coloredlogs"
+        "coloredlogs",
         "hydra-core",
         ],
     package_data={'': ['gui/resources/*.svg']},
